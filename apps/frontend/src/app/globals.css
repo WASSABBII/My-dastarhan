@@ -5,6 +5,8 @@
 }
 
 :root {
+  --font-jost: 'Jost', sans-serif;
+  --font-cormorant: 'Cormorant Garamond', serif;
   --primary: #e63922;
   --secondary: #fbbf24;
   --accent: #10b981;
