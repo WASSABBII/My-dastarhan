@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Бронирование — Dastarkhan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+      --primary:#e63922; --secondary:#fbbf24; --accent:#10b981;
+      --bg:#fdf9f5; --card:#ffffff; --card-warm:#fef7f0; --border:#e8ddd4;
+      --text:#1c1008; --text-sec:#6b5344; --text-muted:#9c7f6e;
+      --shadow:rgba(28,16,8,0.08); --shadow-md:rgba(28,16,8,0.14);
+    }
+    body { font-family:'Jost',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+    nav { display:flex; align-items:center; justify-content:space-between; padding:0 56px; height:68px; background:var(--card); border-bottom:1px solid var(--border); }
+    .logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .logo-mark { width:34px; height:34px; background:var(--primary); border-radius:8px; display:flex; align-items:center; justify-content:center; }
+    .logo-mark svg { width:18px; height:18px; fill:white; }
+    .logo-text { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; color:var(--text); }
+    .logo-text span { color:var(--primary); }
+    .nav-back { font-size:14px; color:var(--text-muted); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color 150ms; }
+    .nav-back:hover { color:var(--primary); }
+
+    /* STEPS BAR */
+    .steps-bar { background:var(--card); border-bottom:1px solid var(--border); padding:0 56px; }
+    .steps-inner { display:flex; align-items:center; gap:0; max-width:760px; margin:0 auto; padding:20px 0; }
+    .step-item { display:flex; align-items:center; gap:10px; flex:1; }
+    .step-item:last-child { flex:none; }
+    .step-circle { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:500; flex-shrink:0; transition:all 200ms; }
+    .step-circle.done { background:var(--accent); color:white; }
+    .step-circle.active { background:var(--primary); color:white; }
+    .step-circle.pending { background:var(--bg); border:1px solid var(--border); color:var(--text-muted); }
+    .step-label { font-size:13px; color:var(--text-muted); white-space:nowrap; transition:color 200ms; }
+    .step-label.active { color:var(--text); font-weight:500; }
+    .step-connector { flex:1; height:1px; background:var(--border); margin:0 12px; transition:background 200ms; }
+    .step-connector.done { background:var(--accent); }
+
+    /* MAIN */
+    .booking-layout { display:grid; grid-template-columns:1fr 360px; gap:32px; max-width:1100px; margin:0 auto; padding:48px 56px 80px; }
+
+    /* STEP PANELS */
+    .step-panel { display:none; }
+    .step-panel.active { display:block; }
+    .panel-title { font-family:'Cormorant Garamond',serif; font-size:34px; font-weight:500; margin-bottom:6px; }
+    .panel-subtitle { font-size:14px; color:var(--text-muted); margin-bottom:36px; font-weight:300; }
+
+    /* STEP 1 — RESTAURANT SEARCH */
+    .filter-row { display:flex; gap:12px; margin-bottom:28px; flex-wrap:wrap; }
+    .filter-chip { background:var(--card); border:1px solid var(--border); border-radius:100px; padding:8px 16px; font-family:'Jost',sans-serif; font-size:13px; color:var(--text-sec); cursor:pointer; transition:all 150ms; }
+    .filter-chip:hover { border-color:var(--primary); color:var(--primary); }
+    .filter-chip.active { background:var(--primary); border-color:var(--primary); color:white; }
+    .date-time-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:28px; }
+    .form-group { display:flex; flex-direction:column; gap:5px; }
+    label { font-size:10px; font-weight:500; color:var(--text-sec); letter-spacing:0.07em; text-transform:uppercase; }
+    input, select { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:10px 12px; font-family:'Jost',sans-serif; font-size:14px; color:var(--text); outline:none; transition:border-color 150ms; width:100%; appearance:none; }
+    input:focus, select:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(230,57,34,.08); }
+    .select-wrap { position:relative; }
+    .select-wrap::after { content:'▾'; position:absolute; right:12px; top:50%; transform:translateY(-50%); font-size:12px; color:var(--text-muted); pointer-events:none; }
+
+    .results-label { font-size:12px; color:var(--text-muted); margin-bottom:14px; letter-spacing:0.03em; }
+    .result-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:20px; margin-bottom:14px; display:flex; gap:18px; cursor:pointer; transition:all 200ms; }
+    .result-card:hover { border-color:var(--primary); box-shadow:0 4px 20px var(--shadow-md); transform:translateY(-1px); }
+    .result-card.selected { border-color:var(--primary); box-shadow:0 0 0 2px rgba(230,57,34,.15); }
+    .result-emoji { width:72px; height:72px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:32px; flex-shrink:0; }
+    .re-1 { background:linear-gradient(135deg,#fef3c7,#fde68a); }
+    .re-2 { background:linear-gradient(135deg,#fce7f3,#fbcfe8); }
+    .re-3 { background:linear-gradient(135deg,#ecfdf5,#d1fae5); }
+    .result-info { flex:1; }
+    .result-name { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:600; margin-bottom:4px; }
+    .result-meta { font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+    .result-slots { display:flex; gap:6px; flex-wrap:wrap; }
+    .rs { background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:4px 10px; font-size:12px; color:var(--text-sec); cursor:pointer; transition:all 150ms; }
+    .rs:hover, .rs.active { background:var(--primary); border-color:var(--primary); color:white; }
+    .rs.taken { opacity:.35; cursor:not-allowed; text-decoration:line-through; }
+    .result-tag { float:right; padding:4px 10px; border-radius:100px; font-size:11px; font-weight:500; }
+    .tag-free { background:#d1fae5; color:#065f46; }
+    .tag-few { background:#fef3c7; color:#92400e; }
+
+    /* STEP 2 — DETAILS */
+    .details-form { display:flex; flex-direction:column; gap:16px; }
+    .form-row-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .guests-selector { display:flex; gap:8px; }
+    .g-btn { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:11px 16px; font-family:'Jost',sans-serif; font-size:14px; color:var(--text-sec); cursor:pointer; transition:all 150ms; min-width:52px; text-align:center; }
+    .g-btn:hover { border-color:var(--primary); color:var(--primary); }
+    .g-btn.active { background:var(--primary); border-color:var(--primary); color:white; font-weight:500; }
+    textarea { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:12px; font-family:'Jost',sans-serif; font-size:14px; color:var(--text); outline:none; transition:border-color 150ms; width:100%; resize:vertical; min-height:90px; line-height:1.5; font-weight:300; }
+    textarea:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(230,57,34,.08); }
+    .occasion-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+    .occ-btn { background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:12px 8px; font-family:'Jost',sans-serif; font-size:12px; color:var(--text-sec); cursor:pointer; text-align:center; transition:all 150ms; display:flex; flex-direction:column; align-items:center; gap:6px; }
+    .occ-btn:hover { border-color:var(--primary); color:var(--primary); }
+    .occ-btn.active { background:#fff5f3; border-color:var(--primary); color:var(--primary); }
+    .occ-icon { font-size:20px; }
+
+    /* STEP 3 — CONFIRM */
+    .confirm-card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:28px; margin-bottom:20px; }
+    .confirm-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid var(--border); }
+    .confirm-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); }
+    .confirm-row:last-child { border:none; }
+    .cr-label { font-size:13px; color:var(--text-muted); }
+    .cr-value { font-size:14px; font-weight:500; color:var(--text); }
+    .confirm-restaurant { display:flex; gap:14px; align-items:center; margin-bottom:24px; }
+    .cr-emoji { width:56px; height:56px; border-radius:12px; background:linear-gradient(135deg,#fef3c7,#fde68a); display:flex; align-items:center; justify-content:center; font-size:26px; }
+    .cr-name { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; }
+    .cr-address { font-size:13px; color:var(--text-muted); }
+    .agree-check { display:flex; gap:10px; align-items:flex-start; font-size:13px; color:var(--text-muted); line-height:1.5; }
+    .agree-check input[type=checkbox] { width:16px; height:16px; flex-shrink:0; margin-top:2px; accent-color:var(--primary); }
+
+    /* SUCCESS */
+    .success-screen { text-align:center; padding:48px 24px; display:none; }
+    .success-icon { width:80px; height:80px; background:#d1fae5; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 24px; font-size:36px; }
+    .success-title { font-family:'Cormorant Garamond',serif; font-size:36px; font-weight:500; margin-bottom:12px; }
+    .success-subtitle { font-size:15px; color:var(--text-sec); margin-bottom:32px; font-weight:300; line-height:1.6; }
+    .booking-code { display:inline-block; background:var(--card); border:2px solid var(--border); border-radius:12px; padding:16px 32px; font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:600; letter-spacing:0.1em; color:var(--primary); margin-bottom:32px; }
+    .success-details { background:var(--card-warm); border:1px solid var(--border); border-radius:12px; padding:20px; max-width:360px; margin:0 auto 32px; text-align:left; }
+    .sd-row { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px; }
+    .sd-row:last-child { border:none; }
+    .sd-label { color:var(--text-muted); }
+    .sd-value { font-weight:500; }
+
+    /* SIDEBAR */
+    .booking-summary { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:28px; position:sticky; top:24px; }
+    .bs-title { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:600; margin-bottom:4px; }
+    .bs-subtitle { font-size:12px; color:var(--text-muted); margin-bottom:20px; }
+    .bs-empty { font-size:13px; color:var(--text-muted); font-weight:300; line-height:1.6; }
+    .bs-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); }
+    .bs-row:last-child { border:none; padding-bottom:0; }
+    .bs-label { font-size:12px; color:var(--text-muted); }
+    .bs-value { font-size:13px; font-weight:500; color:var(--text); }
+    .bs-restaurant { display:flex; gap:12px; align-items:center; margin-bottom:16px; padding-bottom:16px; border-bottom:1px solid var(--border); }
+    .bs-emoji { width:44px; height:44px; border-radius:10px; background:linear-gradient(135deg,#fef3c7,#fde68a); display:flex; align-items:center; justify-content:center; font-size:20px; }
+    .bs-rname { font-size:14px; font-weight:500; }
+    .bs-rmeta { font-size:11px; color:var(--text-muted); }
+    .bs-free-badge { display:inline-block; background:#d1fae5; color:#065f46; padding:3px 8px; border-radius:100px; font-size:10px; font-weight:500; margin-top:4px; }
+
+    /* BUTTONS */
+    .btn-row { display:flex; gap:12px; margin-top:28px; }
+    .btn-next { background:var(--primary); color:white; border:none; padding:14px 28px; border-radius:10px; font-family:'Jost',sans-serif; font-size:14px; font-weight:500; cursor:pointer; transition:all 150ms; flex:1; }
+    .btn-next:hover { opacity:.88; transform:translateY(-1px); box-shadow:0 6px 20px rgba(230,57,34,.3); }
+    .btn-back-step { background:transparent; color:var(--text-muted); border:1px solid var(--border); padding:14px 20px; border-radius:10px; font-family:'Jost',sans-serif; font-size:14px; cursor:pointer; transition:all 150ms; }
+    .btn-back-step:hover { border-color:var(--text-muted); color:var(--text); }
+    .btn-home { background:var(--primary); color:white; border:none; padding:14px 32px; border-radius:10px; font-family:'Jost',sans-serif; font-size:14px; font-weight:500; cursor:pointer; transition:all 150ms; text-decoration:none; display:inline-block; }
+    .btn-home:hover { opacity:.88; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">
+    <div class="logo-mark"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
+    <span class="logo-text">Dastarkhan<span>.</span></span>
+  </a>
+  <a href="index.html" class="nav-back">← Вернуться</a>
+</nav>
+
+<div class="steps-bar">
+  <div class="steps-inner">
+    <div class="step-item">
+      <div class="step-circle active" id="sc-1">1</div>
+      <div class="step-label active" id="sl-1">Выбор ресторана</div>
+    </div>
+    <div class="step-connector" id="conn-1"></div>
+    <div class="step-item">
+      <div class="step-circle pending" id="sc-2">2</div>
+      <div class="step-label" id="sl-2">Детали</div>
+    </div>
+    <div class="step-connector" id="conn-2"></div>
+    <div class="step-item">
+      <div class="step-circle pending" id="sc-3">3</div>
+      <div class="step-label" id="sl-3">Подтверждение</div>
+    </div>
+  </div>
+</div>
+
+<div class="booking-layout">
+  <div>
+
+    <!-- STEP 1 -->
+    <div class="step-panel active" id="panel-1">
+      <div class="panel-title">Найдите свой стол</div>
+      <div class="panel-subtitle">Укажите дату и предпочтения — покажем доступные рестораны</div>
+
+      <div class="date-time-row">
+        <div class="form-group"><label>Дата</label><input type="date" id="s1date" /></div>
+        <div class="form-group"><label>Время</label><div class="select-wrap"><select id="s1time"><option>18:00</option><option>18:30</option><option>19:00</option><option selected>19:30</option><option>20:00</option><option>20:30</option><option>21:00</option></select></div></div>
+        <div class="form-group"><label>Гости</label><div class="select-wrap"><select id="s1guests"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6+</option></select></div></div>
+      </div>
+
+      <div class="filter-row">
+        <div class="filter-chip active" onclick="toggleChip(this)">Все</div>
+        <div class="filter-chip" onclick="toggleChip(this)">Казахская</div>
+        <div class="filter-chip" onclick="toggleChip(this)">Японская</div>
+        <div class="filter-chip" onclick="toggleChip(this)">Европейская</div>
+        <div class="filter-chip" onclick="toggleChip(this)">Итальянская</div>
+        <div class="filter-chip" onclick="toggleChip(this)">Есть места</div>
+      </div>
+
+      <div class="results-label">Найдено 3 ресторана на выбранную дату</div>
+
+      <div class="result-card selected" id="rc-1" onclick="selectRestaurant('rc-1','Дастархан House','🏯','re-1')">
+        <div class="result-emoji re-1">🏯</div>
+        <div class="result-info">
+          <span class="result-tag tag-free">Есть места</span>
+          <div class="result-name">Дастархан House</div>
+          <div class="result-meta">Казахская · ₸₸₸ · ★ 4.9 · ул. Панфилова, 98</div>
+          <div class="result-slots">
+            <div class="rs active" onclick="selectSlot(this,event)">19:00</div>
+            <div class="rs" onclick="selectSlot(this,event)">19:30</div>
+            <div class="rs" onclick="selectSlot(this,event)">20:00</div>
+            <div class="rs taken">21:00</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-card" id="rc-2" onclick="selectRestaurant('rc-2','Sakura Garden','🌸','re-2')">
+        <div class="result-emoji re-2">🌸</div>
+        <div class="result-info">
+          <span class="result-tag tag-few">Мало мест</span>
+          <div class="result-name">Sakura Garden</div>
+          <div class="result-meta">Японская · ₸₸₸₸ · ★ 4.7 · пр. Достык, 44</div>
+          <div class="result-slots">
+            <div class="rs taken">18:00</div>
+            <div class="rs" onclick="selectSlot(this,event)">19:30</div>
+            <div class="rs taken">20:00</div>
+            <div class="rs taken">21:00</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-card" id="rc-3" onclick="selectRestaurant('rc-3','Verde Almaty','🌿','re-3')">
+        <div class="result-emoji re-3">🌿</div>
+        <div class="result-info">
+          <span class="result-tag tag-free">Есть места</span>
+          <div class="result-name">Verde Almaty</div>
+          <div class="result-meta">Европейская · ₸₸ · ★ 4.8 · ул. Жибек Жолы, 56</div>
+          <div class="result-slots">
+            <div class="rs" onclick="selectSlot(this,event)">18:30</div>
+            <div class="rs" onclick="selectSlot(this,event)">19:00</div>
+            <div class="rs" onclick="selectSlot(this,event)">20:30</div>
+            <div class="rs" onclick="selectSlot(this,event)">21:00</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row"><button class="btn-next" onclick="goToStep(2)">Продолжить →</button></div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-panel" id="panel-2">
+      <div class="panel-title">Детали бронирования</div>
+      <div class="panel-subtitle">Укажите ваши данные и пожелания</div>
+
+      <div class="details-form">
+        <div class="form-row-2">
+          <div class="form-group"><label>Имя</label><input type="text" placeholder="Айгерим" id="fname" /></div>
+          <div class="form-group"><label>Фамилия</label><input type="text" placeholder="Касымова" id="lname" /></div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group"><label>Телефон</label><input type="tel" placeholder="+7 (___) ___-__-__" id="phone" /></div>
+          <div class="form-group"><label>Email</label><input type="email" placeholder="email@mail.com" id="email" /></div>
+        </div>
+
+        <div class="form-group">
+          <label>Повод (необязательно)</label>
+          <div class="occasion-grid">
+            <div class="occ-btn" onclick="setOcc(this)"><div class="occ-icon">🎂</div>День рождения</div>
+            <div class="occ-btn" onclick="setOcc(this)"><div class="occ-icon">💍</div>Свидание</div>
+            <div class="occ-btn" onclick="setOcc(this)"><div class="occ-icon">💼</div>Деловой ужин</div>
+            <div class="occ-btn" onclick="setOcc(this)"><div class="occ-icon">🥂</div>Юбилей</div>
+            <div class="occ-btn" onclick="setOcc(this)"><div class="occ-icon">👨‍👩‍👧‍👦</div>Семейный ужин</div>
+            <div class="occ-btn" onclick="setOcc(this)"><div class="occ-icon">✨</div>Просто так</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Пожелания (необязательно)</label>
+          <textarea placeholder="Стол у окна, высокий стул для ребёнка, аллергия на орехи..."></textarea>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-back-step" onclick="goToStep(1)">← Назад</button>
+        <button class="btn-next" onclick="goToStep(3)">Перейти к подтверждению →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-panel" id="panel-3">
+      <div class="panel-title">Подтвердите бронь</div>
+      <div class="panel-subtitle">Проверьте детали перед подтверждением</div>
+
+      <div class="confirm-card">
+        <div class="confirm-restaurant">
+          <div class="cr-emoji">🏯</div>
+          <div><div class="cr-name">Дастархан House</div><div class="cr-address">ул. Панфилова, 98 · Казахская кухня</div></div>
+        </div>
+        <div class="confirm-title">Детали бронирования</div>
+        <div class="confirm-row"><div class="cr-label">Дата</div><div class="cr-value" id="cf-date">—</div></div>
+        <div class="confirm-row"><div class="cr-label">Время</div><div class="cr-value">19:00</div></div>
+        <div class="confirm-row"><div class="cr-label">Гостей</div><div class="cr-value" id="cf-guests">2 человека</div></div>
+        <div class="confirm-row"><div class="cr-label">Имя</div><div class="cr-value" id="cf-name">—</div></div>
+        <div class="confirm-row"><div class="cr-label">Телефон</div><div class="cr-value" id="cf-phone">—</div></div>
+        <div class="confirm-row"><div class="cr-label">Повод</div><div class="cr-value" id="cf-occ">Не указан</div></div>
+      </div>
+
+      <div class="confirm-card">
+        <div style="font-size:13px;color:var(--text-muted);font-weight:300;line-height:1.7;">
+          Бесплатная отмена возможна не позднее чем за 2 часа до начала. Мы отправим подтверждение по SMS и Email. Если вы не придёте — пожалуйста, отмените бронь заранее, чтобы место досталось другому гостю.
+        </div>
+      </div>
+
+      <div class="agree-check"><input type="checkbox" id="agree" checked /><label for="agree" style="text-transform:none;font-size:13px;letter-spacing:0;font-weight:300;">Я согласен с условиями использования и политикой конфиденциальности</label></div>
+
+      <div class="btn-row">
+        <button class="btn-back-step" onclick="goToStep(2)">← Назад</button>
+        <button class="btn-next" onclick="confirmBooking()">✓ Подтвердить бронирование</button>
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success-screen" id="success">
+      <div class="success-icon">✓</div>
+      <div class="success-title">Бронь подтверждена!</div>
+      <div class="success-subtitle">Ваш стол забронирован. Подтверждение отправлено на номер телефона и Email.</div>
+      <div class="booking-code">DST-7842</div>
+      <div class="success-details">
+        <div class="sd-row"><div class="sd-label">Ресторан</div><div class="sd-value">Дастархан House</div></div>
+        <div class="sd-row"><div class="sd-label">Дата</div><div class="sd-value" id="s-date">—</div></div>
+        <div class="sd-row"><div class="sd-label">Время</div><div class="sd-value">19:00</div></div>
+        <div class="sd-row"><div class="sd-label">Гостей</div><div class="sd-value" id="s-guests">2</div></div>
+      </div>
+      <a href="index.html" class="btn-home">Вернуться на главную</a>
+    </div>
+  </div>
+
+  <!-- SIDEBAR SUMMARY -->
+  <div>
+    <div class="booking-summary" id="summary-box">
+      <div class="bs-title">Ваш выбор</div>
+      <div class="bs-subtitle">Краткая сводка бронирования</div>
+
+      <div class="bs-restaurant">
+        <div class="bs-emoji">🏯</div>
+        <div>
+          <div class="bs-rname">Дастархан House</div>
+          <div class="bs-rmeta">Казахская · ₸₸₸</div>
+          <div class="bs-free-badge">● Есть места</div>
+        </div>
+      </div>
+
+      <div class="bs-row"><div class="bs-label">Дата</div><div class="bs-value" id="sum-date">—</div></div>
+      <div class="bs-row"><div class="bs-label">Время</div><div class="bs-value">19:00</div></div>
+      <div class="bs-row"><div class="bs-label">Гостей</div><div class="bs-value" id="sum-guests">2</div></div>
+      <div class="bs-row" style="margin-top:8px"><div class="bs-label" style="color:var(--accent);font-size:11px;">✓ Бесплатное бронирование</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+  function formatDate(val) {
+    if (!val) return '—';
+    const d = new Date(val + 'T00:00');
+    return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  const dateInput = document.getElementById('s1date');
+  dateInput.value = new Date().toISOString().split('T')[0];
+  updateSummary();
+
+  dateInput.addEventListener('change', updateSummary);
+  document.getElementById('s1guests').addEventListener('change', updateSummary);
+
+  function updateSummary() {
+    const dv = formatDate(dateInput.value);
+    const gv = document.getElementById('s1guests').value + ' чел.';
+    document.getElementById('sum-date').textContent = dv;
+    document.getElementById('sum-guests').textContent = document.getElementById('s1guests').value;
+    document.getElementById('cf-date').textContent = dv;
+    document.getElementById('cf-guests').textContent = document.getElementById('s1guests').value + ' человека';
+    document.getElementById('s-date').textContent = dv;
+    document.getElementById('s-guests').textContent = document.getElementById('s1guests').value;
+  }
+
+  function goToStep(n) {
+    // Update panels
+    document.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('panel-' + n).classList.add('active');
+
+    // Update steps bar
+    for (let i=1; i<=3; i++) {
+      const sc = document.getElementById('sc-' + i);
+      const sl = document.getElementById('sl-' + i);
+      if (i < n) { sc.className='step-circle done'; sc.textContent='✓'; sl.className='step-label'; }
+      else if (i === n) { sc.className='step-circle active'; sc.textContent=i; sl.className='step-label active'; }
+      else { sc.className='step-circle pending'; sc.textContent=i; sl.className='step-label'; }
+      if (i < 3) {
+        const conn = document.getElementById('conn-' + i);
+        conn.className = 'step-connector' + (i < n ? ' done' : '');
+      }
+    }
+
+    // Fill confirm step
+    if (n === 3) {
+      const fn = document.getElementById('fname').value || '—';
+      const ln = document.getElementById('lname').value || '';
+      document.getElementById('cf-name').textContent = fn + ' ' + ln;
+      document.getElementById('cf-phone').textContent = document.getElementById('phone').value || '—';
+      const occ = document.querySelector('.occ-btn.active');
+      document.getElementById('cf-occ').textContent = occ ? occ.textContent.trim() : 'Не указан';
+    }
+    updateSummary();
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function confirmBooking() {
+    document.querySelectorAll('.step-panel').forEach(p=>p.style.display='none');
+    document.getElementById('success').style.display='block';
+    document.getElementById('summary-box').style.display='none';
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function toggleChip(el) {
+    document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function selectRestaurant(id, name, emoji, cls) {
+    document.querySelectorAll('.result-card').forEach(c=>c.classList.remove('selected'));
+    document.getElementById(id).classList.add('selected');
+    document.querySelector('.bs-emoji').textContent = emoji;
+    document.querySelector('.bs-emoji').className = 'bs-emoji ' + cls;
+    document.querySelector('.bs-rname').textContent = name;
+    document.querySelector('.cr-name').textContent = name;
+    document.querySelector('.cr-emoji').textContent = emoji;
+  }
+
+  function selectSlot(el, e) {
+    e.stopPropagation();
+    if (el.classList.contains('taken')) return;
+    const card = el.closest('.result-card');
+    card.querySelectorAll('.rs:not(.taken)').forEach(s=>s.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelector('#summary-box .bs-row:nth-child(4) .bs-value').textContent = el.textContent;
+  }
+
+  function setOcc(el) {
+    document.querySelectorAll('.occ-btn').forEach(b=>b.classList.remove('active'));
+    el.classList.add('active');
+  }
+</script>
+</body>
+</html>

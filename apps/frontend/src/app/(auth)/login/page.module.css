@@ -1,0 +1,1016 @@
+/* ============================================
+   PAGE LAYOUT
+   ============================================ */
+.page {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+}
+
+/* ============================================
+   LEFT PANEL
+   ============================================ */
+.leftPanel {
+  background: var(--text);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 48px 56px;
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+}
+
+.leftDeco1 {
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  border: 56px solid rgba(251, 191, 36, 0.08);
+  pointer-events: none;
+}
+
+.leftDeco2 {
+  position: absolute;
+  bottom: -60px;
+  left: -60px;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  border: 40px solid rgba(230, 57, 34, 0.1);
+  pointer-events: none;
+}
+
+.logoLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  position: relative;
+  z-index: 1;
+}
+
+.logoMark {
+  width: 36px;
+  height: 36px;
+  background: var(--primary);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.logoMark svg {
+  width: 18px;
+  height: 18px;
+  fill: white;
+}
+
+.logoText {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: #fdf9f5;
+}
+
+.logoText span {
+  color: #f97461;
+}
+
+.leftHero {
+  position: relative;
+  z-index: 1;
+}
+
+.leftQuote {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 42px;
+  font-weight: 500;
+  color: #fdf9f5;
+  line-height: 1.15;
+  margin-bottom: 18px;
+}
+
+.leftQuote em {
+  font-style: italic;
+  color: #fbbf24;
+}
+
+.leftDesc {
+  font-size: 14px;
+  color: #9c7f6e;
+  line-height: 1.7;
+  font-weight: 300;
+  max-width: 320px;
+}
+
+.leftStats {
+  display: flex;
+  gap: 32px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 28px;
+  position: relative;
+  z-index: 1;
+  flex-wrap: wrap;
+}
+
+.lsItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lsNum {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: #fdf9f5;
+}
+
+.lsLabel {
+  font-size: 11px;
+  color: #6b5344;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================
+   RIGHT PANEL
+   ============================================ */
+.rightPanel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 56px;
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+.authBox {
+  width: 100%;
+  max-width: 400px;
+}
+
+/* ============================================
+   TYPE SWITCHER
+   ============================================ */
+.typeSwitcher {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 32px;
+  gap: 4px;
+}
+
+.typeBtn {
+  padding: 10px;
+  border-radius: 9px;
+  border: none;
+  background: transparent;
+  font-family: var(--font-jost), 'Jost', sans-serif;
+  font-size: 13px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 200ms;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-weight: 400;
+  min-height: 44px;
+}
+
+.typeBtn svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+.typeBtnActive {
+  background: white;
+  color: var(--text);
+  font-weight: 500;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+/* ============================================
+   TITLES
+   ============================================ */
+.authTitle {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 30px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.authSubtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+/* ============================================
+   PROGRESS STEPS
+   ============================================ */
+.progressSteps {
+  display: flex;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.psItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.psCircle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 500;
+  flex-shrink: 0;
+  transition: all 250ms ease;
+}
+
+.psCircleDone {
+  background: var(--accent);
+  color: white;
+}
+
+.psCircleActive {
+  background: var(--primary);
+  color: white;
+}
+
+.psCirclePending {
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  color: var(--text-muted);
+}
+
+.psLabel {
+  font-size: 12px;
+  color: var(--text-muted);
+  transition: color 250ms;
+  white-space: nowrap;
+}
+
+.psLabelActive {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.psConnector {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+  margin: 0 8px;
+  transition: background 250ms;
+}
+
+.psConnectorDone {
+  background: var(--accent);
+}
+
+/* ============================================
+   FORM
+   ============================================ */
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.formLabel {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-sec);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.formInput {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 11px 14px;
+  font-family: var(--font-jost), 'Jost', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+  width: 100%;
+  appearance: none;
+  transition: border-color 150ms, box-shadow 150ms;
+}
+
+.formInput:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(230, 57, 34, 0.08);
+}
+
+/* ============================================
+   PHONE ROW
+   ============================================ */
+.phoneRow {
+  display: flex;
+  position: relative;
+}
+
+.countryCode {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-right: none;
+  border-radius: 9px 0 0 9px;
+  padding: 11px 14px;
+  font-family: var(--font-jost), 'Jost', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 150ms;
+  user-select: none;
+  min-height: 44px;
+}
+
+.countryCode .flag {
+  font-size: 17px;
+  line-height: 1;
+}
+
+.countryCode .caret {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.phoneNumInput {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 0 9px 9px 0;
+  padding: 11px 14px;
+  font-family: var(--font-jost), 'Jost', sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  outline: none;
+  transition: border-color 150ms, box-shadow 150ms;
+  min-height: 44px;
+}
+
+.phoneNumInput:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(230, 57, 34, 0.08);
+}
+
+.phoneRowFocused .countryCode {
+  border-color: var(--primary);
+}
+
+/* ============================================
+   CHANNEL SELECTOR
+   ============================================ */
+.channelLabelRow {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.channelSelector {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.channelBtn {
+  flex: 1;
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 8px;
+  font-family: var(--font-jost), 'Jost', sans-serif;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: all 150ms;
+  min-height: 44px;
+}
+
+.channelBtn .chIcon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.channelBtn .chName {
+  font-size: 12px;
+  color: var(--text-sec);
+  font-weight: 500;
+}
+
+.channelBtn .chHint {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-weight: 300;
+}
+
+.channelBtn:hover {
+  border-color: var(--text-muted);
+}
+
+.channelBtnActive {
+  border-color: var(--primary) !important;
+  background: #fff5f3;
+}
+
+.channelBtnActive .chName {
+  color: var(--primary) !important;
+}
+
+/* ============================================
+   OTP
+   ============================================ */
+.otpRow {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.otpCell {
+  width: 56px;
+  height: 64px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  text-align: center;
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--text);
+  outline: none;
+  transition: all 150ms;
+  caret-color: var(--primary);
+}
+
+.otpCell:focus {
+  border-color: var(--primary);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(230, 57, 34, 0.08);
+}
+
+.otpCellFilled {
+  border-color: var(--primary);
+  background: white;
+}
+
+.otpHint {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  min-height: 18px;
+  margin-bottom: 16px;
+  transition: color 150ms;
+}
+
+.resendRow {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.resendLink {
+  color: var(--primary);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ============================================
+   SENT INFO BOX
+   ============================================ */
+.sentInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--card-warm);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 24px;
+}
+
+.sentInfoIcon {
+  font-size: 26px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.sentInfoText {
+  font-size: 13px;
+  color: var(--text-sec);
+  line-height: 1.55;
+}
+
+.sentInfoPhone {
+  font-weight: 500;
+  color: var(--text);
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.submitBtn {
+  width: 100%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 14px;
+  font-family: var(--font-jost), 'Jost', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 150ms;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+}
+
+.submitBtn:hover:not(:disabled) {
+  opacity: 0.88;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(230, 57, 34, 0.28);
+}
+
+.submitBtn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submitBtn:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+.errorMsg {
+  background: #fff1f0;
+  border: 1px solid #ffccc7;
+  color: #cf1322;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.backBtn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-family: var(--font-jost), 'Jost', sans-serif;
+  font-size: 14px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 150ms;
+  flex-shrink: 0;
+  min-height: 44px;
+}
+
+.backBtn:hover {
+  border-color: var(--text-muted);
+  color: var(--text);
+}
+
+.btnRow {
+  display: flex;
+  gap: 10px;
+}
+
+/* ============================================
+   SUCCESS SCREEN
+   ============================================ */
+.successScreen {
+  text-align: center;
+  padding: 16px 0;
+}
+
+.successIcon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #d1fae5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.successIcon svg {
+  width: 32px;
+  height: 32px;
+  stroke: #065f46;
+}
+
+.successTitle {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 30px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.successSubtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-weight: 300;
+  line-height: 1.65;
+  margin-bottom: 28px;
+}
+
+.goBtn {
+  display: inline-block;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 32px;
+  font-family: var(--font-jost), 'Jost', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 150ms;
+  min-height: 44px;
+}
+
+.goBtn:hover {
+  opacity: 0.88;
+}
+
+/* ============================================
+   TERMS
+   ============================================ */
+.terms {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.65;
+  margin-top: 14px;
+  text-align: center;
+  font-weight: 300;
+}
+
+.terms a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+/* ============================================
+   WELCOME BOX (step 3 new user)
+   ============================================ */
+.welcomeBox {
+  background: var(--card-warm);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.welcomeBoxIcon {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.welcomeBoxText {
+  font-size: 13px;
+  color: var(--text-sec);
+  line-height: 1.65;
+  font-weight: 300;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 900px) {
+  .page {
+    grid-template-columns: 1fr;
+  }
+
+  .leftPanel {
+    min-height: auto;
+    padding: 32px 24px 36px;
+  }
+
+  .leftQuote {
+    font-size: 32px;
+  }
+
+  .rightPanel {
+    min-height: auto;
+    padding: 36px 24px 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .leftPanel {
+    padding: 24px 16px 28px;
+  }
+
+  .leftQuote {
+    font-size: 28px;
+  }
+
+  .rightPanel {
+    padding: 24px 16px 40px;
+    align-items: flex-start;
+  }
+
+  .authBox {
+    max-width: 100%;
+  }
+
+  .otpCell {
+    width: 48px;
+    height: 56px;
+    font-size: 26px;
+  }
+
+  .channelSelector {
+    gap: 8px;
+  }
+}
+
+/* ============================================
+   RESTAURANT LOGIN FORM
+   ============================================ */
+.passwordRow {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.passwordRow .formInput {
+  padding-right: 44px;
+}
+
+.eyeBtn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  padding: 0;
+  transition: color 150ms;
+}
+
+.eyeBtn:hover {
+  color: var(--text-sec);
+}
+
+.forgotRow {
+  text-align: right;
+  margin-bottom: 20px;
+  margin-top: -8px;
+}
+
+.forgotLink {
+  font-size: 13px;
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.forgotLink:hover {
+  text-decoration: underline;
+}
+
+.restRegisterRow {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 20px;
+}
+
+.restRegisterLink {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.restRegisterLink:hover {
+  text-decoration: underline;
+}
+
+/* ============================================
+   RESTAURANT TABS
+   ============================================ */
+.rModeTabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+.rModeTab {
+  flex: 1;
+  padding: 10px;
+  font-size: 13px;
+  font-family: var(--font-jost), 'Jost', sans-serif;
+  color: var(--text-muted);
+  cursor: pointer;
+  text-align: center;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  background: transparent;
+  transition: all 150ms;
+}
+
+.rModeTabActive {
+  color: var(--primary);
+  border-color: var(--primary);
+  font-weight: 500;
+}
+
+/* ============================================
+   STEP DOTS
+   ============================================ */
+.stepDots {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 22px;
+}
+
+.stepDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: all 200ms;
+}
+
+.stepDotActive {
+  background: var(--primary);
+  width: 20px;
+  border-radius: 3px;
+}
+
+.stepDotDone {
+  background: var(--accent);
+}
+
+/* ============================================
+   CUISINE / DAY TAGS
+   ============================================ */
+.cuisineGrid {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.cuisineTag {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-family: var(--font-jost), 'Jost', sans-serif;
+  color: var(--text-sec);
+  cursor: pointer;
+  transition: all 150ms;
+}
+
+.cuisineTagActive {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+/* ============================================
+   RIB (info block)
+   ============================================ */
+.rib {
+  background: var(--card-warm);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
+.ribTitle {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-sec);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.ribNotice {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+/* ============================================
+   FORM ROW TWO COLUMNS
+   ============================================ */
+.formRowTwo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+/* ============================================
+   SELECT WRAP
+   ============================================ */
+.selectWrap {
+  position: relative;
+}
+
+.selectWrap::after {
+  content: '▾';
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.formSelect {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 11px 14px;
+  font-family: var(--font-jost), 'Jost', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+  width: 100%;
+  appearance: none;
+  transition: border-color 150ms;
+}
+
+.formSelect:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(230, 57, 34, 0.08);
+}
+
+/* ============================================
+   AGREE CHECKBOX ROW
+   ============================================ */
+.agreeRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 300;
+  cursor: pointer;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.agreeCheck {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.agreeRow a {
+  color: var(--primary);
+  text-decoration: none;
+}

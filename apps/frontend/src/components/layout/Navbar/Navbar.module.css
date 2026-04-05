@@ -1,0 +1,215 @@
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 56px;
+  height: 68px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.logoMark {
+  width: 34px;
+  height: 34px;
+  background: var(--primary);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.logoMark svg {
+  width: 18px;
+  height: 18px;
+  fill: white;
+}
+
+.logoText {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.logoText span {
+  color: var(--primary);
+}
+
+.navList {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+  align-items: center;
+}
+
+.navList a {
+  font-size: 14px;
+  color: var(--text-sec);
+  text-decoration: none;
+  transition: color 150ms;
+}
+
+.navList a:hover {
+  color: var(--primary);
+}
+
+.navCta {
+  background: var(--primary) !important;
+  color: white !important;
+  padding: 9px 22px;
+  border-radius: 8px;
+  font-weight: 500 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.04em;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.navCta:hover {
+  opacity: 0.88;
+}
+
+.navRestaurant {
+  font-size: 13px !important;
+  color: var(--text-sec) !important;
+  border: 1px solid var(--border) !important;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-weight: 500 !important;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  transition: border-color 150ms, color 150ms !important;
+}
+
+.navRestaurant:hover {
+  border-color: var(--primary) !important;
+  color: var(--primary) !important;
+}
+
+/* Burger button — hidden on desktop */
+.burgerBtn {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+}
+
+.burgerLine {
+  width: 22px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: all 200ms;
+}
+
+/* Mobile drawer */
+.mobileMenu {
+  display: none;
+  flex-direction: column;
+  position: fixed;
+  top: 68px;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 24px 24px;
+  z-index: 99;
+  box-shadow: 0 8px 24px var(--shadow-md);
+}
+
+.mobileMenu.open {
+  display: flex;
+}
+
+.mobileNavList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.mobileNavList li a {
+  display: block;
+  padding: 14px 0;
+  font-size: 16px;
+  color: var(--text-sec);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border);
+  transition: color 150ms;
+}
+
+.mobileNavList li:last-child a {
+  border-bottom: none;
+}
+
+.mobileNavList li a:hover {
+  color: var(--primary);
+}
+
+.mobileRestaurant {
+  margin-top: 16px;
+  background: transparent;
+  color: var(--text-sec);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  min-height: 44px;
+  display: block;
+}
+
+.mobileCta {
+  margin-top: 8px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-align: center;
+  min-height: 44px;
+}
+
+@media (max-width: 768px) {
+  .nav {
+    padding: 0 20px;
+  }
+
+  .navList {
+    display: none;
+  }
+
+  .burgerBtn {
+    display: flex;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav {
+    padding: 0 16px;
+  }
+}

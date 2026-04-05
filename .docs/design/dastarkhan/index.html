@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dastarkhan — Бронирование столиков в Алматы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #e63922;
+      --secondary: #fbbf24;
+      --accent: #10b981;
+      --bg: #fdf9f5;
+      --card: #ffffff;
+      --card-warm: #fef7f0;
+      --border: #e8ddd4;
+      --text: #1c1008;
+      --text-sec: #6b5344;
+      --text-muted: #9c7f6e;
+      --shadow: rgba(28,16,8,0.08);
+      --shadow-md: rgba(28,16,8,0.14);
+    }
+    body { font-family: 'Jost', sans-serif; background: var(--bg); color: var(--text); }
+
+    /* NAV */
+    nav { display:flex; align-items:center; justify-content:space-between; padding:0 56px; height:68px; background:var(--card); border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; }
+    .logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .logo-mark { width:34px; height:34px; background:var(--primary); border-radius:8px; display:flex; align-items:center; justify-content:center; }
+    .logo-mark svg { width:18px; height:18px; fill:white; }
+    .logo-text { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; color:var(--text); }
+    .logo-text span { color:var(--primary); }
+    nav ul { display:flex; gap:32px; list-style:none; }
+    nav ul a { font-size:14px; color:var(--text-sec); text-decoration:none; transition:color 150ms; }
+    nav ul a:hover { color:var(--primary); }
+    .nav-cta { background:var(--primary)!important; color:white!important; padding:9px 22px; border-radius:8px; font-weight:500!important; font-size:13px!important; letter-spacing:0.04em; }
+
+    /* HERO */
+    .hero { display:grid; grid-template-columns:1fr 1fr; min-height:calc(100vh - 68px); max-height:780px; }
+    .hero-left { padding:72px 56px 72px 64px; display:flex; flex-direction:column; justify-content:center; gap:28px; }
+    .hero-badge { display:inline-flex; align-items:center; gap:8px; background:#fff8ec; border:1px solid #fde68a; border-radius:100px; padding:6px 14px; font-size:12px; color:#92400e; font-weight:500; letter-spacing:0.05em; width:fit-content; }
+    .hero-badge::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--secondary); }
+    .hero-title { font-family:'Cormorant Garamond',serif; font-size:58px; font-weight:500; line-height:1.08; }
+    .hero-title em { font-style:italic; color:var(--primary); }
+    .hero-subtitle { font-size:16px; color:var(--text-sec); line-height:1.6; font-weight:300; max-width:400px; }
+    .hero-actions { display:flex; gap:14px; align-items:center; }
+    .btn-primary { background:var(--primary); color:white; border:none; padding:14px 30px; border-radius:10px; font-family:'Jost',sans-serif; font-size:14px; font-weight:500; letter-spacing:0.04em; cursor:pointer; transition:all 150ms; text-decoration:none; display:inline-block; }
+    .btn-primary:hover { opacity:.88; transform:translateY(-1px); box-shadow:0 6px 20px rgba(230,57,34,.28); }
+    .btn-ghost { background:transparent; color:var(--text-sec); border:1px solid var(--border); padding:13px 22px; border-radius:10px; font-family:'Jost',sans-serif; font-size:14px; cursor:pointer; transition:all 150ms; display:flex; align-items:center; gap:8px; }
+    .btn-ghost:hover { border-color:var(--text-muted); color:var(--text); }
+    .hero-stats { display:flex; gap:36px; padding-top:8px; }
+    .stat { display:flex; flex-direction:column; gap:2px; }
+    .stat-num { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:600; }
+    .stat-label { font-size:12px; color:var(--text-muted); letter-spacing:0.04em; }
+    .stat-divider { width:1px; background:var(--border); align-self:stretch; }
+
+    /* HERO RIGHT */
+    .hero-right { background:var(--card-warm); border-left:1px solid var(--border); display:flex; align-items:center; justify-content:center; padding:48px; position:relative; overflow:hidden; }
+    .hero-right::before { content:''; position:absolute; top:-60px; right:-60px; width:280px; height:280px; border-radius:50%; border:40px solid rgba(251,191,36,.12); }
+    .hero-right::after { content:''; position:absolute; bottom:-40px; left:-40px; width:180px; height:180px; border-radius:50%; border:28px solid rgba(230,57,34,.08); }
+
+    /* BOOKING CARD */
+    .booking-card { background:white; border-radius:20px; padding:32px; width:100%; max-width:380px; box-shadow:0 4px 32px var(--shadow-md); border:1px solid var(--border); position:relative; z-index:1; }
+    .booking-card-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; margin-bottom:4px; }
+    .booking-card-subtitle { font-size:13px; color:var(--text-muted); margin-bottom:24px; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px; }
+    .form-group { display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
+    label { font-size:11px; font-weight:500; color:var(--text-sec); letter-spacing:0.06em; text-transform:uppercase; }
+    input, select { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:10px 12px; font-family:'Jost',sans-serif; font-size:14px; color:var(--text); outline:none; transition:border-color 150ms; width:100%; appearance:none; }
+    input:focus, select:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(230,57,34,.08); }
+    .select-wrap { position:relative; }
+    .select-wrap::after { content:'▾'; position:absolute; right:12px; top:50%; transform:translateY(-50%); font-size:12px; color:var(--text-muted); pointer-events:none; }
+    .guests-selector { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; }
+    .guest-btn { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:10px 4px; font-family:'Jost',sans-serif; font-size:13px; color:var(--text-sec); cursor:pointer; text-align:center; transition:all 150ms; }
+    .guest-btn:hover { border-color:var(--primary); color:var(--primary); }
+    .guest-btn.active { background:var(--primary); border-color:var(--primary); color:white; font-weight:500; }
+    .divider { height:1px; background:var(--border); margin:20px 0; }
+    .submit-btn { width:100%; background:var(--primary); color:white; border:none; border-radius:10px; padding:14px; font-family:'Jost',sans-serif; font-size:14px; font-weight:500; letter-spacing:0.05em; cursor:pointer; transition:all 150ms; display:flex; align-items:center; justify-content:center; gap:8px; }
+    .submit-btn:hover { opacity:.88; transform:translateY(-1px); box-shadow:0 6px 24px rgba(230,57,34,.3); }
+    .trust-row { display:flex; justify-content:center; gap:16px; margin-top:16px; }
+    .trust-item { font-size:11px; color:var(--text-muted); display:flex; align-items:center; gap:5px; }
+    .trust-dot { width:5px; height:5px; border-radius:50%; background:var(--accent); }
+
+    /* RESTAURANTS */
+    .section { padding:80px 64px; }
+    .section-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:40px; }
+    .section-label { font-size:11px; font-weight:500; color:var(--primary); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:8px; }
+    .section-title { font-family:'Cormorant Garamond',serif; font-size:38px; font-weight:500; line-height:1.1; }
+    .section-link { font-size:13px; color:var(--text-muted); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color 150ms; padding-bottom:4px; border-bottom:1px solid var(--border); }
+    .section-link:hover { color:var(--primary); border-color:var(--primary); }
+    .restaurants-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+    .restaurant-card { background:white; border-radius:16px; overflow:hidden; border:1px solid var(--border); transition:all 200ms; cursor:pointer; }
+    .restaurant-card:hover { transform:translateY(-3px); box-shadow:0 12px 40px var(--shadow-md); }
+    .restaurant-img { height:180px; position:relative; overflow:hidden; }
+    .restaurant-img-bg { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:64px; }
+    .r1 { background:linear-gradient(135deg,#fef3c7,#fde68a); }
+    .r2 { background:linear-gradient(135deg,#fce7f3,#fbcfe8); }
+    .r3 { background:linear-gradient(135deg,#ecfdf5,#d1fae5); }
+    .r4 { background:linear-gradient(135deg,#eff6ff,#dbeafe); }
+    .r5 { background:linear-gradient(135deg,#fdf4ff,#f3e8ff); }
+    .r6 { background:linear-gradient(135deg,#fff7ed,#fed7aa); }
+    .restaurant-badge { position:absolute; top:12px; left:12px; background:white; border-radius:100px; padding:4px 10px; font-size:11px; font-weight:500; color:var(--text-sec); box-shadow:0 2px 8px var(--shadow); }
+    .restaurant-tag { position:absolute; top:12px; right:12px; padding:4px 10px; border-radius:100px; font-size:10px; font-weight:500; letter-spacing:0.04em; }
+    .tag-free { background:#d1fae5; color:#065f46; }
+    .tag-busy { background:#fee2e2; color:#991b1b; }
+    .tag-few { background:#fef3c7; color:#92400e; }
+    .restaurant-info { padding:18px 20px 20px; }
+    .restaurant-name { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; margin-bottom:4px; }
+    .restaurant-meta { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+    .restaurant-cuisine { font-size:12px; color:var(--text-muted); }
+    .restaurant-rating { display:flex; align-items:center; gap:4px; font-size:12px; font-weight:500; color:var(--text-sec); }
+    .star { color:var(--secondary); }
+    .restaurant-times { display:flex; gap:6px; flex-wrap:wrap; }
+    .time-slot { background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:5px 11px; font-size:12px; color:var(--text-sec); cursor:pointer; transition:all 150ms; }
+    .time-slot:hover { border-color:var(--primary); color:var(--primary); background:#fff5f3; }
+    .time-slot.taken { opacity:.4; cursor:not-allowed; text-decoration:line-through; }
+
+    /* HOW */
+    .how-section { background:var(--card-warm); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:80px 64px; }
+    .steps-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:40px; margin-top:48px; }
+    .step { display:flex; flex-direction:column; gap:14px; }
+    .step-num { width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; }
+    .s1 { background:#fee2e2; color:var(--primary); }
+    .s2 { background:#fef3c7; color:#92400e; }
+    .s3 { background:#d1fae5; color:#065f46; }
+    .s4 { background:#e0e7ff; color:#3730a3; }
+    .step-title { font-size:15px; font-weight:500; }
+    .step-desc { font-size:13px; color:var(--text-muted); line-height:1.6; font-weight:300; }
+
+    /* FOOTER */
+    footer { background:var(--text); padding:56px 64px 36px; }
+    .footer-top { display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr; gap:48px; margin-bottom:48px; }
+    .footer-logo { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:600; color:#fdf9f5; margin-bottom:14px; }
+    .footer-logo span { color:#f97461; }
+    .footer-desc { font-size:13px; color:#9c7f6e; line-height:1.7; font-weight:300; }
+    .footer-col-title { font-size:11px; font-weight:500; color:#6b5344; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:16px; }
+    .footer-links { list-style:none; display:flex; flex-direction:column; gap:10px; }
+    .footer-links a { font-size:13px; color:#9c7f6e; text-decoration:none; transition:color 150ms; font-weight:300; }
+    .footer-links a:hover { color:#fdf9f5; }
+    .footer-bottom { border-top:1px solid rgba(255,255,255,.06); padding-top:24px; display:flex; justify-content:space-between; align-items:center; }
+    .footer-copy { font-size:12px; color:#6b5344; }
+    .footer-langs { display:flex; gap:14px; }
+    .lang-btn { font-size:12px; color:#6b5344; cursor:pointer; transition:color 150ms; background:none; border:none; font-family:'Jost',sans-serif; }
+    .lang-btn.active, .lang-btn:hover { color:#fdf9f5; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">
+    <div class="logo-mark"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
+    <span class="logo-text">Dastarkhan<span>.</span></span>
+  </a>
+  <ul>
+    <li><a href="restaurant.html">Рестораны</a></li>
+    <li><a href="#">Кухни</a></li>
+    <li><a href="#">Акции</a></li>
+    <li><a href="#">О нас</a></li>
+    <li><a href="booking.html" class="nav-cta">Забронировать</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-badge">Алматы · 120+ ресторанов</div>
+    <h1 class="hero-title">Ваш стол<br>в лучших<br><em>ресторанах</em><br>города</h1>
+    <p class="hero-subtitle">Бронируйте столики в ресторанах Алматы за секунды. Без звонков, без ожидания — только удовольствие.</p>
+    <div class="hero-actions">
+      <a href="booking.html" class="btn-primary">Найти стол</a>
+      <button class="btn-ghost" onclick="document.querySelector('.how-section').scrollIntoView({behavior:'smooth'})">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Как это работает
+      </button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">120+</span><span class="stat-label">Ресторанов</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num">4 800</span><span class="stat-label">Броней в месяц</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num">4.9</span><span class="stat-label">Рейтинг</span></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="booking-card">
+      <div class="booking-card-title">Забронировать стол</div>
+      <div class="booking-card-subtitle">Быстро и бесплатно</div>
+      <div class="form-group"><label>Дата</label><input type="date" id="bdate" /></div>
+      <div class="form-row">
+        <div class="form-group" style="margin:0"><label>Время</label><div class="select-wrap"><select><option>18:00</option><option>18:30</option><option>19:00</option><option>19:30</option><option>20:00</option><option>20:30</option><option>21:00</option></select></div></div>
+        <div class="form-group" style="margin:0"><label>Кухня</label><div class="select-wrap"><select><option>Любая</option><option>Казахская</option><option>Европейская</option><option>Японская</option><option>Итальянская</option></select></div></div>
+      </div>
+      <div class="form-group">
+        <label>Количество гостей</label>
+        <div class="guests-selector">
+          <button class="guest-btn" onclick="setGuests(this)">1</button>
+          <button class="guest-btn active" onclick="setGuests(this)">2</button>
+          <button class="guest-btn" onclick="setGuests(this)">3</button>
+          <button class="guest-btn" onclick="setGuests(this)">4</button>
+          <button class="guest-btn" onclick="setGuests(this)">5+</button>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <button class="submit-btn" onclick="window.location.href='booking.html'">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Показать столики
+      </button>
+      <div class="trust-row">
+        <div class="trust-item"><div class="trust-dot"></div>Мгновенное подтверждение</div>
+        <div class="trust-item"><div class="trust-dot"></div>Бесплатно</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-header">
+    <div><div class="section-label">Популярные места</div><div class="section-title">Рестораны Алматы</div></div>
+    <a href="restaurant.html" class="section-link">Все рестораны →</a>
+  </div>
+  <div class="restaurants-grid">
+    <div class="restaurant-card" onclick="window.location.href='restaurant.html'">
+      <div class="restaurant-img"><div class="restaurant-img-bg r1">🏯</div><div class="restaurant-badge">★ 4.9</div><div class="restaurant-tag tag-free">Есть места</div></div>
+      <div class="restaurant-info">
+        <div class="restaurant-name">Дастархан House</div>
+        <div class="restaurant-meta"><span class="restaurant-cuisine">Казахская · ₸₸₸</span><span class="restaurant-rating"><span class="star">★</span> 4.9</span></div>
+        <div class="restaurant-times"><div class="time-slot">18:00</div><div class="time-slot">19:30</div><div class="time-slot">20:00</div><div class="time-slot taken">21:00</div></div>
+      </div>
+    </div>
+    <div class="restaurant-card" onclick="window.location.href='restaurant.html'">
+      <div class="restaurant-img"><div class="restaurant-img-bg r2">🌸</div><div class="restaurant-badge">★ 4.7</div><div class="restaurant-tag tag-few">Мало мест</div></div>
+      <div class="restaurant-info">
+        <div class="restaurant-name">Sakura Garden</div>
+        <div class="restaurant-meta"><span class="restaurant-cuisine">Японская · ₸₸₸₸</span><span class="restaurant-rating"><span class="star">★</span> 4.7</span></div>
+        <div class="restaurant-times"><div class="time-slot taken">18:00</div><div class="time-slot">19:00</div><div class="time-slot taken">20:00</div><div class="time-slot taken">21:00</div></div>
+      </div>
+    </div>
+    <div class="restaurant-card" onclick="window.location.href='restaurant.html'">
+      <div class="restaurant-img"><div class="restaurant-img-bg r3">🌿</div><div class="restaurant-badge">★ 4.8</div><div class="restaurant-tag tag-free">Есть места</div></div>
+      <div class="restaurant-info">
+        <div class="restaurant-name">Verde Almaty</div>
+        <div class="restaurant-meta"><span class="restaurant-cuisine">Европейская · ₸₸</span><span class="restaurant-rating"><span class="star">★</span> 4.8</span></div>
+        <div class="restaurant-times"><div class="time-slot">18:30</div><div class="time-slot">19:00</div><div class="time-slot">20:30</div><div class="time-slot">21:00</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how-section">
+  <div><div class="section-label">Просто и быстро</div><div class="section-title">Как это работает</div></div>
+  <div class="steps-grid">
+    <div class="step"><div class="step-num s1">1</div><div class="step-title">Выберите ресторан</div><div class="step-desc">Фильтруйте по кухне, цене, рейтингу и доступным столикам на нужную дату.</div></div>
+    <div class="step"><div class="step-num s2">2</div><div class="step-title">Укажите детали</div><div class="step-desc">Дата, время, количество гостей — и любые пожелания к столику или поводу.</div></div>
+    <div class="step"><div class="step-num s3">3</div><div class="step-title">Подтверждение</div><div class="step-desc">Бронь подтверждается мгновенно. Напоминание придёт за час до визита.</div></div>
+    <div class="step"><div class="step-num s4">4</div><div class="step-title">Наслаждайтесь</div><div class="step-desc">Просто назовите имя на входе — ваш стол готов, всё уже организовано.</div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div><div class="footer-logo">Dastarkhan<span>.</span></div><p class="footer-desc">Платформа онлайн-бронирования столиков в ресторанах Алматы. Быстро, удобно, бесплатно.</p></div>
+    <div><div class="footer-col-title">Сервис</div><ul class="footer-links"><li><a href="restaurant.html">Все рестораны</a></li><li><a href="#">Акции</a></li><li><a href="#">Мои брони</a></li><li><a href="#">Отзывы</a></li></ul></div>
+    <div><div class="footer-col-title">Ресторанам</div><ul class="footer-links"><li><a href="admin.html">Подключить ресторан</a></li><li><a href="admin.html">Кабинет заведения</a></li><li><a href="#">Тарифы</a></li><li><a href="#">API</a></li></ul></div>
+    <div><div class="footer-col-title">Компания</div><ul class="footer-links"><li><a href="#">О нас</a></li><li><a href="#">Контакты</a></li><li><a href="#">Политика конфиденциальности</a></li><li><a href="#">Условия использования</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Dastarkhan. Алматы, Казахстан</div>
+    <div class="footer-langs"><button class="lang-btn active">РУС</button><button class="lang-btn">ҚАЗ</button><button class="lang-btn">ENG</button></div>
+  </div>
+</footer>
+
+<script>
+  function setGuests(el) { document.querySelectorAll('.guest-btn').forEach(b=>b.classList.remove('active')); el.classList.add('active'); }
+  document.getElementById('bdate').value = new Date().toISOString().split('T')[0];
+  document.querySelectorAll('.lang-btn').forEach(btn=>btn.addEventListener('click',function(){ document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active'); }));
+</script>
+</body>
+</html>

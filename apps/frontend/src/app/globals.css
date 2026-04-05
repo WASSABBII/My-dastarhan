@@ -1,0 +1,74 @@
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #e63922;
+  --secondary: #fbbf24;
+  --accent: #10b981;
+  --bg: #fdf9f5;
+  --card: #ffffff;
+  --card-warm: #fef7f0;
+  --border: #e8ddd4;
+  --text: #1c1008;
+  --text-sec: #6b5344;
+  --text-muted: #9c7f6e;
+  --shadow: rgba(28, 16, 8, 0.08);
+  --shadow-md: rgba(28, 16, 8, 0.14);
+  --sidebar: 180px;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-jost), 'Jost', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+/* Utility classes */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

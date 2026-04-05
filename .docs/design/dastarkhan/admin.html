@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Админ — Дастархан House</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+      --primary:#e63922; --secondary:#fbbf24; --accent:#10b981;
+      --bg:#fdf9f5; --card:#ffffff; --card-warm:#fef7f0; --border:#e8ddd4;
+      --text:#1c1008; --text-sec:#6b5344; --text-muted:#9c7f6e;
+      --shadow:rgba(28,16,8,0.08); --shadow-md:rgba(28,16,8,0.14);
+      --sidebar:180px;
+    }
+    body { font-family:'Jost',sans-serif; background:var(--bg); color:var(--text); display:flex; min-height:100vh; }
+
+    /* SIDEBAR */
+    .sidebar { width:var(--sidebar); background:var(--text); display:flex; flex-direction:column; padding:24px 0; position:fixed; top:0; bottom:0; left:0; z-index:50; }
+    .sidebar-logo { padding:0 20px 28px; border-bottom:1px solid rgba(255,255,255,.07); }
+    .sidebar-logo-text { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:600; color:#fdf9f5; }
+    .sidebar-logo-text span { color:#f97461; }
+    .sidebar-subtitle { font-size:10px; color:#6b5344; letter-spacing:0.05em; margin-top:2px; }
+    .sidebar-nav { padding:20px 12px; flex:1; display:flex; flex-direction:column; gap:4px; }
+    .nav-item { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:8px; cursor:pointer; transition:all 150ms; text-decoration:none; color:#9c7f6e; font-size:13px; }
+    .nav-item:hover { background:rgba(255,255,255,.06); color:#fdf9f5; }
+    .nav-item.active { background:rgba(230,57,34,.2); color:#f97461; }
+    .nav-item svg { width:16px; height:16px; flex-shrink:0; }
+    .sidebar-bottom { padding:16px 12px; border-top:1px solid rgba(255,255,255,.07); }
+    .restaurant-info { display:flex; align-items:center; gap:10px; }
+    .ri-avatar { width:34px; height:34px; border-radius:8px; background:linear-gradient(135deg,#fef3c7,#fde68a); display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+    .ri-name { font-size:12px; font-weight:500; color:#fdf9f5; }
+    .ri-status { font-size:10px; color:#6b5344; }
+    .status-dot { display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--accent); margin-right:4px; }
+
+    /* MAIN */
+    .main { margin-left:var(--sidebar); flex:1; display:flex; flex-direction:column; }
+
+    /* TOPBAR */
+    .topbar { background:var(--card); border-bottom:1px solid var(--border); padding:0 32px; height:62px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:40; }
+    .topbar-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:500; }
+    .topbar-right { display:flex; align-items:center; gap:16px; }
+    .today-badge { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:6px 14px; font-size:13px; color:var(--text-sec); }
+    .notif-btn { width:36px; height:36px; border-radius:8px; border:1px solid var(--border); background:var(--card); display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative; }
+    .notif-btn svg { width:16px; height:16px; color:var(--text-sec); }
+    .notif-badge { position:absolute; top:-4px; right:-4px; width:16px; height:16px; background:var(--primary); border-radius:50%; font-size:10px; color:white; display:flex; align-items:center; justify-content:center; border:2px solid white; }
+
+    /* CONTENT */
+    .content { padding:28px 32px; flex:1; }
+
+    /* METRICS */
+    .metrics-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px; }
+    .metric-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:20px; }
+    .mc-label { font-size:11px; color:var(--text-muted); letter-spacing:0.05em; text-transform:uppercase; margin-bottom:8px; }
+    .mc-value { font-family:'Cormorant Garamond',serif; font-size:34px; font-weight:600; color:var(--text); line-height:1; margin-bottom:6px; }
+    .mc-sub { font-size:12px; color:var(--text-muted); }
+    .mc-trend { display:inline-flex; align-items:center; gap:3px; font-size:11px; font-weight:500; padding:2px 7px; border-radius:100px; }
+    .trend-up { background:#d1fae5; color:#065f46; }
+    .trend-down { background:#fee2e2; color:#991b1b; }
+
+    /* STATUS FILTER */
+    .section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+    .section-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:500; }
+    .status-filters { display:flex; gap:8px; flex-wrap:wrap; }
+    .sf { background:var(--bg); border:1px solid var(--border); border-radius:100px; padding:6px 14px; font-size:12px; color:var(--text-muted); cursor:pointer; transition:all 150ms; }
+    .sf:hover { border-color:var(--text-muted); color:var(--text-sec); }
+    .sf.active { color:white; border-color:transparent; }
+    .sf-all.active { background:var(--text); }
+    .sf-pending.active { background:#f59e0b; }
+    .sf-confirmed.active { background:#3b82f6; }
+    .sf-arrived.active { background:#10b981; }
+    .sf-cancelled.active { background:#9ca3af; }
+
+    /* TABLE */
+    .table-wrap { background:var(--card); border:1px solid var(--border); border-radius:16px; overflow:hidden; }
+    table { width:100%; border-collapse:collapse; }
+    thead tr { border-bottom:1px solid var(--border); }
+    thead th { padding:12px 16px; font-size:11px; font-weight:500; color:var(--text-muted); text-align:left; letter-spacing:0.06em; text-transform:uppercase; }
+    tbody tr { border-bottom:1px solid var(--border); transition:background 150ms; cursor:pointer; }
+    tbody tr:last-child { border:none; }
+    tbody tr:hover { background:var(--bg); }
+    tbody td { padding:14px 16px; font-size:13px; color:var(--text-sec); }
+    .td-name { font-weight:500; color:var(--text); font-size:14px; }
+    .td-time { font-weight:500; color:var(--text); }
+
+    .status-pill { display:inline-flex; align-items:center; gap:5px; border-radius:100px; padding:3px 10px; font-size:11px; font-weight:500; }
+    .sp-pending { background:#fef3c7; color:#92400e; }
+    .sp-confirmed { background:#dbeafe; color:#1e40af; }
+    .sp-arrived { background:#d1fae5; color:#065f46; }
+    .sp-cancelled { background:#f3f4f6; color:#6b7280; }
+    .sp-noshow { background:#fee2e2; color:#991b1b; }
+    .sp-extended { background:#ede9fe; color:#5b21b6; }
+    .sp-dot { width:5px; height:5px; border-radius:50%; background:currentColor; }
+
+    .action-btn { background:transparent; border:1px solid var(--border); border-radius:6px; padding:4px 10px; font-family:'Jost',sans-serif; font-size:11px; color:var(--text-muted); cursor:pointer; transition:all 150ms; margin-right:4px; }
+    .action-btn:hover { border-color:var(--primary); color:var(--primary); }
+    .action-btn.confirm { border-color:var(--accent); color:var(--accent); }
+    .action-btn.confirm:hover { background:var(--accent); color:white; }
+
+    /* RIGHT PANEL */
+    .content-grid { display:grid; grid-template-columns:1fr 300px; gap:20px; }
+
+    /* TIMELINE */
+    .timeline-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:20px; }
+    .tc-title { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:500; margin-bottom:16px; }
+    .tl-item { display:flex; gap:12px; margin-bottom:16px; }
+    .tl-time { font-size:12px; color:var(--text-muted); width:40px; flex-shrink:0; padding-top:2px; }
+    .tl-dot-col { display:flex; flex-direction:column; align-items:center; }
+    .tl-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; margin-top:3px; }
+    .tl-line { width:1px; background:var(--border); flex:1; margin-top:4px; }
+    .tl-info { flex:1; padding-bottom:12px; }
+    .tl-name { font-size:13px; font-weight:500; color:var(--text); }
+    .tl-detail { font-size:12px; color:var(--text-muted); margin-top:2px; }
+    .dot-confirmed { background:#3b82f6; }
+    .dot-pending { background:#f59e0b; }
+    .dot-arrived { background:#10b981; }
+    .dot-empty { background:var(--border); }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-text">Dastarkhan<span>.</span></div>
+    <div class="sidebar-subtitle">Кабинет ресторана</div>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="#" class="nav-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Дашборд
+    </a>
+    <a href="#" class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Брони
+    </a>
+    <a href="#" class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M5.2 20a8 8 0 0 1 13.6 0"/></svg>
+      Гости
+    </a>
+    <a href="#" class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Зал
+    </a>
+    <a href="#" class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Аналитика
+    </a>
+    <a href="#" class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+      Настройки
+    </a>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="restaurant-info">
+      <div class="ri-avatar">🏯</div>
+      <div>
+        <div class="ri-name">Дастархан House</div>
+        <div class="ri-status"><span class="status-dot"></span>Открыто</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Дашборд</div>
+    <div class="topbar-right">
+      <div class="today-badge" id="today-label">Загрузка...</div>
+      <div class="notif-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <div class="notif-badge">3</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- METRICS -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="mc-label">Брони сегодня</div>
+        <div class="mc-value">18</div>
+        <div class="mc-sub"><span class="mc-trend trend-up">↑ +3</span> vs вчера</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">Гостей сегодня</div>
+        <div class="mc-value">64</div>
+        <div class="mc-sub"><span class="mc-trend trend-up">↑ +12</span> vs вчера</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">Загрузка зала</div>
+        <div class="mc-value">72%</div>
+        <div class="mc-sub"><span class="mc-trend trend-up">↑ 8%</span> vs вчера</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">No-show сегодня</div>
+        <div class="mc-value">2</div>
+        <div class="mc-sub"><span class="mc-trend trend-down">↑ +1</span> vs вчера</div>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <div>
+        <div class="section-header">
+          <div class="section-title">Брони на сегодня</div>
+          <div class="status-filters">
+            <div class="sf sf-all active" onclick="filterStatus('all',this)">Все</div>
+            <div class="sf sf-pending" onclick="filterStatus('pending',this)">Ожидают</div>
+            <div class="sf sf-confirmed" onclick="filterStatus('confirmed',this)">Подтверждены</div>
+            <div class="sf sf-arrived" onclick="filterStatus('arrived',this)">Пришли</div>
+            <div class="sf sf-cancelled" onclick="filterStatus('cancelled',this)">Отменены</div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Гость</th>
+                <th>Время</th>
+                <th>Гостей</th>
+                <th>Стол</th>
+                <th>Статус</th>
+                <th>Действия</th>
+              </tr>
+            </thead>
+            <tbody id="bookings-tbody">
+              <tr data-status="arrived">
+                <td><div class="td-name">Айгерим Касымова</div><div style="font-size:11px;color:var(--text-muted)">+7 701 123 45 67</div></td>
+                <td class="td-time">12:00</td>
+                <td>4</td>
+                <td>#3</td>
+                <td><span class="status-pill sp-arrived"><span class="sp-dot"></span>Пришли</span></td>
+                <td><button class="action-btn">Продлить</button></td>
+              </tr>
+              <tr data-status="confirmed">
+                <td><div class="td-name">Данияр Мухамедов</div><div style="font-size:11px;color:var(--text-muted)">+7 707 987 65 43</div></td>
+                <td class="td-time">13:30</td>
+                <td>2</td>
+                <td>#7</td>
+                <td><span class="status-pill sp-confirmed"><span class="sp-dot"></span>Подтверждён</span></td>
+                <td><button class="action-btn">Отметить</button><button class="action-btn">Отменить</button></td>
+              </tr>
+              <tr data-status="pending">
+                <td><div class="td-name">Сергей Николаев</div><div style="font-size:11px;color:var(--text-muted)">+7 777 555 44 33</div></td>
+                <td class="td-time">15:00</td>
+                <td>6</td>
+                <td>#12</td>
+                <td><span class="status-pill sp-pending"><span class="sp-dot"></span>Ожидает</span></td>
+                <td><button class="action-btn confirm">Подтвердить</button><button class="action-btn">Отменить</button></td>
+              </tr>
+              <tr data-status="confirmed">
+                <td><div class="td-name">Малика Ержанова</div><div style="font-size:11px;color:var(--text-muted)">+7 705 222 11 88</div></td>
+                <td class="td-time">18:00</td>
+                <td>2</td>
+                <td>#5</td>
+                <td><span class="status-pill sp-confirmed"><span class="sp-dot"></span>Подтверждён</span></td>
+                <td><button class="action-btn">Отметить</button><button class="action-btn">Отменить</button></td>
+              </tr>
+              <tr data-status="pending">
+                <td><div class="td-name">Асем Байжанова</div><div style="font-size:11px;color:var(--text-muted)">+7 702 876 54 32</div></td>
+                <td class="td-time">19:00</td>
+                <td>3</td>
+                <td>#9</td>
+                <td><span class="status-pill sp-pending"><span class="sp-dot"></span>Ожидает</span></td>
+                <td><button class="action-btn confirm">Подтвердить</button><button class="action-btn">Отменить</button></td>
+              </tr>
+              <tr data-status="confirmed">
+                <td><div class="td-name">Тимур Алиев</div><div style="font-size:11px;color:var(--text-muted)">+7 771 345 67 89</div></td>
+                <td class="td-time">19:30</td>
+                <td>4</td>
+                <td>#2</td>
+                <td><span class="status-pill sp-confirmed"><span class="sp-dot"></span>Подтверждён</span></td>
+                <td><button class="action-btn">Отметить</button><button class="action-btn">Отменить</button></td>
+              </tr>
+              <tr data-status="cancelled">
+                <td><div class="td-name">Ольга Смирнова</div><div style="font-size:11px;color:var(--text-muted)">+7 707 111 22 33</div></td>
+                <td class="td-time">20:00</td>
+                <td>2</td>
+                <td>—</td>
+                <td><span class="status-pill sp-cancelled"><span class="sp-dot"></span>Отменена</span></td>
+                <td><button class="action-btn">Восстановить</button></td>
+              </tr>
+              <tr data-status="pending">
+                <td><div class="td-name">Нурлан Сейткали</div><div style="font-size:11px;color:var(--text-muted)">+7 708 654 32 10</div></td>
+                <td class="td-time">20:30</td>
+                <td>5</td>
+                <td>#14</td>
+                <td><span class="status-pill sp-pending"><span class="sp-dot"></span>Ожидает</span></td>
+                <td><button class="action-btn confirm">Подтвердить</button><button class="action-btn">Отменить</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TIMELINE -->
+      <div>
+        <div class="section-header" style="margin-bottom:12px;">
+          <div class="section-title">Расписание</div>
+        </div>
+        <div class="timeline-card">
+          <div class="tl-item">
+            <div class="tl-time">12:00</div>
+            <div class="tl-dot-col"><div class="tl-dot dot-arrived"></div><div class="tl-line"></div></div>
+            <div class="tl-info"><div class="tl-name">Касымова · 4 гостя</div><div class="tl-detail">Стол #3 · Пришли</div></div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">13:30</div>
+            <div class="tl-dot-col"><div class="tl-dot dot-confirmed"></div><div class="tl-line"></div></div>
+            <div class="tl-info"><div class="tl-name">Мухамедов · 2 гостя</div><div class="tl-detail">Стол #7 · Подтверждён</div></div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">15:00</div>
+            <div class="tl-dot-col"><div class="tl-dot dot-pending"></div><div class="tl-line"></div></div>
+            <div class="tl-info"><div class="tl-name">Николаев · 6 гостей</div><div class="tl-detail">Стол #12 · Ожидает</div></div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">18:00</div>
+            <div class="tl-dot-col"><div class="tl-dot dot-confirmed"></div><div class="tl-line"></div></div>
+            <div class="tl-info"><div class="tl-name">Ержанова · 2 гостя</div><div class="tl-detail">Стол #5 · Подтверждён</div></div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">19:00</div>
+            <div class="tl-dot-col"><div class="tl-dot dot-pending"></div><div class="tl-line"></div></div>
+            <div class="tl-info"><div class="tl-name">Байжанова · 3 гостя</div><div class="tl-detail">Стол #9 · Ожидает</div></div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">19:30</div>
+            <div class="tl-dot-col"><div class="tl-dot dot-confirmed"></div><div class="tl-line"></div></div>
+            <div class="tl-info"><div class="tl-name">Алиев · 4 гостя</div><div class="tl-detail">Стол #2 · Подтверждён</div></div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">20:30</div>
+            <div class="tl-dot-col"><div class="tl-dot dot-pending"></div></div>
+            <div class="tl-info"><div class="tl-name">Сейткали · 5 гостей</div><div class="tl-detail">Стол #14 · Ожидает</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+  const days = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
+  const d = new Date();
+  document.getElementById('today-label').textContent = days[d.getDay()] + ', ' + d.getDate() + ' ' + months[d.getMonth()];
+
+  function filterStatus(status, el) {
+    document.querySelectorAll('.sf').forEach(f=>f.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelectorAll('#bookings-tbody tr').forEach(row => {
+      row.style.display = (status === 'all' || row.dataset.status === status) ? '' : 'none';
+    });
+  }
+</script>
+</body>
+</html>

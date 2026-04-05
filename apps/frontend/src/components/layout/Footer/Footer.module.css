@@ -1,0 +1,123 @@
+.footer {
+  background: var(--text);
+  padding: 56px 64px 36px;
+}
+
+.footerTop {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+
+.footerLogo {
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #fdf9f5;
+  margin-bottom: 14px;
+}
+
+.footerLogo span {
+  color: #f97461;
+}
+
+.footerDesc {
+  font-size: 13px;
+  color: #9c7f6e;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.footerColTitle {
+  font-size: 11px;
+  font-weight: 500;
+  color: #6b5344;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.footerLinks {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footerLinks a {
+  font-size: 13px;
+  color: #9c7f6e;
+  text-decoration: none;
+  transition: color 150ms;
+  font-weight: 300;
+}
+
+.footerLinks a:hover {
+  color: #fdf9f5;
+}
+
+.footerBottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footerCopy {
+  font-size: 12px;
+  color: #6b5344;
+}
+
+.footerLangs {
+  display: flex;
+  gap: 14px;
+}
+
+.langBtn {
+  font-size: 12px;
+  color: #6b5344;
+  cursor: pointer;
+  transition: color 150ms;
+  background: none;
+  border: none;
+  font-family: var(--font-jost), 'Jost', sans-serif;
+  min-height: 44px;
+  padding: 0 4px;
+}
+
+.langBtn.active,
+.langBtn:hover {
+  color: #fdf9f5;
+}
+
+@media (max-width: 1024px) {
+  .footer {
+    padding: 48px 40px 32px;
+  }
+
+  .footerTop {
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+  }
+}
+
+@media (max-width: 640px) {
+  .footer {
+    padding: 40px 20px 28px;
+  }
+
+  .footerTop {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .footerBottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
