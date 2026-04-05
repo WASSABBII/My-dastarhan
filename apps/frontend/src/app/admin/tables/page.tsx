@@ -19,7 +19,7 @@ function authHeader() {
   return { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
 }
 
-const emptyForm = { label: '', capacity: 2, location_tag: '', shape: 'square' as const, is_active: true }
+const emptyForm = { label: '', capacity: 2, location_tag: '', shape: 'square' as 'round' | 'square' | 'rectangle', is_active: true }
 
 export default function AdminTablesPage() {
   const [tables, setTables] = useState<Table[]>([])
@@ -27,6 +27,7 @@ export default function AdminTablesPage() {
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState<Table | null>(null)
   const [form, setForm] = useState(emptyForm)
+  const [qrTable, setQrTable] = useState<Table | null>(null)
 
   useEffect(() => {
     fetch(`${API}/admin/restaurant`, { headers: authHeader() })
@@ -87,8 +88,41 @@ export default function AdminTablesPage() {
     load()
   }
 
+  const [qrDataUrl, setQrDataUrl] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!qrTable) { setQrDataUrl(null); return }
+    const token = localStorage.getItem('token') || ''
+    fetch(`${API}/admin/tables/${qrTable.id}/qr`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(r => r.blob())
+      .then(blob => setQrDataUrl(URL.createObjectURL(blob)))
+      .catch(() => {})
+  }, [qrTable])
+
   return (
     <div>
+      {qrTable && (
+        <div className={styles.modalOverlay} onClick={() => setQrTable(null)}>
+          <div className={styles.modalBox} onClick={e => e.stopPropagation()}>
+            <div className={styles.modalTitle}>QR-код: {qrTable.label}</div>
+            {qrDataUrl
+              ? <img src={qrDataUrl} alt="QR" className={styles.qrImg} />
+              : <div className={styles.qrImg} style={{ display:'flex', alignItems:'center', justifyContent:'center', color:'var(--text-sec)' }}>Загрузка...</div>
+            }
+            <div className={styles.modalActions}>
+              {qrDataUrl && (
+                <a className={styles.downloadBtn} href={qrDataUrl} download={`qr-${qrTable.label}.png`}>
+                  Скачать PNG
+                </a>
+              )}
+              <button className={styles.cancelFormBtn} onClick={() => setQrTable(null)}>Закрыть</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className={styles.header}>
         <div />
         <button className={styles.addBtn} onClick={openAdd}>+ Добавить столик</button>
@@ -166,6 +200,7 @@ export default function AdminTablesPage() {
                     </span>
                   </td>
                   <td>
+                    <button className={styles.iconBtn} onClick={() => setQrTable(t)}>QR</button>
                     <button className={styles.iconBtn} onClick={() => openEdit(t)}>Изменить</button>
                     <button className={`${styles.iconBtn} ${styles.iconBtnDanger}`} onClick={() => handleDelete(t.id)}>Удалить</button>
                   </td>

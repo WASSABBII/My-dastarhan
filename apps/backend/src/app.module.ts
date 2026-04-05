@@ -12,6 +12,9 @@ import { GatewaysModule } from './gateways/gateways.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { ProcessorsModule } from './modules/queues/processors/processors.module';
 import { WebhooksModule } from './modules/webhooks/webhooks.module';
+import { ChatModule } from './modules/chat/chat.module';
+import { StatsModule } from './modules/stats/stats.module';
+import { ReviewsModule } from './modules/reviews/reviews.module';
 import databaseConfig from './config/database.config';
 import jwtConfig from './config/jwt.config';
 import redisConfig from './config/redis.config';
@@ -34,6 +37,9 @@ import redisConfig from './config/redis.config';
     NotificationsModule,
     ProcessorsModule,
     WebhooksModule,
+    ChatModule,
+    StatsModule,
+    ReviewsModule,
   ],
 })
 export class AppModule {}
