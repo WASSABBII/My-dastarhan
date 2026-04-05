@@ -1,0 +1,73 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #faf8f5;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e8e2d9;
+  border-radius: 12px;
+  padding: 48px;
+  text-align: center;
+  max-width: 420px;
+  width: 100%;
+}
+
+.logo {
+  font-family: var(--font-cormorant);
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 32px;
+}
+
+.title {
+  font-family: var(--font-cormorant);
+  font-size: 28px;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin: 0 0 8px;
+}
+
+.subtitle {
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  background: #e63922;
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 20px;
+  margin: 0 0 24px;
+}
+
+.email {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 16px;
+}
+
+.desc {
+  font-size: 15px;
+  color: #888;
+  line-height: 1.6;
+  margin: 0 0 32px;
+}
+
+.logout {
+  background: none;
+  border: 1px solid #e8e2d9;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-size: 14px;
+  color: #666;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.logout:hover {
+  border-color: #e63922;
+  color: #e63922;
+}

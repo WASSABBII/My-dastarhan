@@ -1,6 +1,8 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { useBookingStore } from '@/store/booking.store'
+import { getStoredUser } from '@/lib/auth'
 import styles from './Step2.module.css'
 
 const OCCASIONS = [
@@ -14,11 +16,26 @@ const OCCASIONS = [
 
 export default function Step2() {
   const store = useBookingStore()
+  const router = useRouter()
   const [name, setName] = useState(store.guestName)
   const [phone, setPhone] = useState(store.guestPhone)
   const [email, setEmail] = useState(store.guestEmail)
   const [occasion, setOccasion] = useState(store.occasion)
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [authed, setAuthed] = useState(false)
+
+  useEffect(() => {
+    const user = getStoredUser()
+    if (!user) {
+      router.push('/login?redirect=/booking')
+      return
+    }
+    if (user.role === 'client') {
+      setAuthed(true)
+      if (user.name && !name) setName(user.name)
+      if (user.phone && !phone) setPhone(user.phone)
+    }
+  }, [])
 
   const validate = () => {
     const errs: Record<string, string> = {}
@@ -41,17 +58,25 @@ export default function Step2() {
       <div className={styles.form}>
         <div className={styles.field}>
           <label className={styles.label}>Имя *</label>
-          <input className={`${styles.input} ${errors.name ? styles.error : ''}`}
-            type="text" placeholder="Ваше имя" value={name}
-            onChange={e => { setName(e.target.value); setErrors(prev => ({ ...prev, name: '' })) }} />
+          {authed ? (
+            <div className={styles.readonlyField}>{name}</div>
+          ) : (
+            <input className={`${styles.input} ${errors.name ? styles.error : ''}`}
+              type="text" placeholder="Ваше имя" value={name}
+              onChange={e => { setName(e.target.value); setErrors(prev => ({ ...prev, name: '' })) }} />
+          )}
           {errors.name && <span className={styles.errMsg}>{errors.name}</span>}
         </div>
 
         <div className={styles.field}>
           <label className={styles.label}>Телефон *</label>
-          <input className={`${styles.input} ${errors.phone ? styles.error : ''}`}
-            type="tel" placeholder="+7 (777) 000-00-00" value={phone}
-            onChange={e => { setPhone(e.target.value); setErrors(prev => ({ ...prev, phone: '' })) }} />
+          {authed ? (
+            <div className={styles.readonlyField}>{phone}</div>
+          ) : (
+            <input className={`${styles.input} ${errors.phone ? styles.error : ''}`}
+              type="tel" placeholder="+7 (777) 000-00-00" value={phone}
+              onChange={e => { setPhone(e.target.value); setErrors(prev => ({ ...prev, phone: '' })) }} />
+          )}
           {errors.phone && <span className={styles.errMsg}>{errors.phone}</span>}
         </div>
 

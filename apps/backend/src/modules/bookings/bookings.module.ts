@@ -8,12 +8,14 @@ import { BookingsController } from './bookings.controller';
 import { AvailabilityService } from './availability.service';
 import { GatewaysModule } from '../../gateways/gateways.module';
 import { QueuesModule } from '../queues/queues.module';
+import { NotificationsModule } from '../notifications/notifications.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Booking, BookingTable, Table]),
     GatewaysModule,
     QueuesModule,
+    NotificationsModule,
   ],
   providers: [BookingsService, AvailabilityService],
   controllers: [BookingsController],

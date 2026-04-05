@@ -7,5 +7,6 @@ export function addMinutes(timeStr: string, minutes: number): string {
 }
 
 export function parseDateTime(date: string, time: string): Date {
-  return new Date(`${date}T${time}:00`);
+  // Явно указываем UTC чтобы избежать смещения на серверах с отличным от local timezone
+  return new Date(`${date}T${time}:00.000Z`);
 }

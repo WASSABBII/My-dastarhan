@@ -9,6 +9,9 @@ import { BookingsModule } from './modules/bookings/bookings.module';
 import { CatalogModule } from './modules/catalog/catalog.module';
 import { QueuesModule } from './modules/queues/queues.module';
 import { GatewaysModule } from './gateways/gateways.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
+import { ProcessorsModule } from './modules/queues/processors/processors.module';
+import { WebhooksModule } from './modules/webhooks/webhooks.module';
 import databaseConfig from './config/database.config';
 import jwtConfig from './config/jwt.config';
 import redisConfig from './config/redis.config';
@@ -28,6 +31,9 @@ import redisConfig from './config/redis.config';
     CatalogModule,
     QueuesModule,
     GatewaysModule,
+    NotificationsModule,
+    ProcessorsModule,
+    WebhooksModule,
   ],
 })
 export class AppModule {}
