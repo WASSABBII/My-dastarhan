@@ -5,6 +5,10 @@ import { AuthModule } from './modules/auth/auth.module';
 import { RestaurantsModule } from './modules/restaurants/restaurants.module';
 import { TablesModule } from './modules/tables/tables.module';
 import { MenuModule } from './modules/menu/menu.module';
+import { BookingsModule } from './modules/bookings/bookings.module';
+import { CatalogModule } from './modules/catalog/catalog.module';
+import { QueuesModule } from './modules/queues/queues.module';
+import { GatewaysModule } from './gateways/gateways.module';
 import databaseConfig from './config/database.config';
 import jwtConfig from './config/jwt.config';
 import redisConfig from './config/redis.config';
@@ -20,6 +24,10 @@ import redisConfig from './config/redis.config';
     RestaurantsModule,
     TablesModule,
     MenuModule,
+    BookingsModule,
+    CatalogModule,
+    QueuesModule,
+    GatewaysModule,
   ],
 })
 export class AppModule {}

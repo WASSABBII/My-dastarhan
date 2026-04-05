@@ -1,0 +1,15 @@
+.page { max-width: 1280px; margin: 0 auto; padding: 0 24px 80px; }
+.loading, .notFound { text-align: center; padding: 80px; color: var(--text-muted); font-size: 18px; }
+.layout { display: grid; grid-template-columns: 1fr 300px; gap: 40px; margin-top: 32px; }
+.main { min-width: 0; }
+.sidebar { }
+.aboutTab { }
+.description { font-size: 16px; line-height: 1.7; color: var(--text-sec); margin-bottom: 24px; }
+.features { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.feature { padding: 12px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; font-size: 14px; color: var(--text); }
+.bookingTab { }
+.loadingText { text-align: center; padding: 40px; color: var(--text-muted); }
+.selectedActions { display: flex; align-items: center; justify-content: space-between; margin-top: 20px; padding: 16px 20px; background: #d1fae5; border-radius: 12px; }
+.selectedInfo { margin: 0; font-size: 15px; color: #065f46; font-weight: 500; }
+.proceedBtn { padding: 12px 24px; background: var(--accent); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .sidebar { order: -1; } }

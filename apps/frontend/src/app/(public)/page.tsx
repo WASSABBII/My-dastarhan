@@ -2,8 +2,6 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import Navbar from '@/components/layout/Navbar/Navbar'
-import Footer from '@/components/layout/Footer/Footer'
 import styles from './page.module.css'
 
 const RESTAURANTS = [
@@ -94,8 +92,6 @@ export default function HomePage() {
 
   return (
     <>
-      <Navbar />
-
       {/* ── HERO ─────────────────────────────────── */}
       <section className={styles.hero}>
         <div className={styles.heroLeft}>
@@ -113,7 +109,7 @@ export default function HomePage() {
           </p>
 
           <div className={styles.heroActions}>
-            <Link href="#" className={styles.btnPrimary}>
+            <Link href="/catalog" className={styles.btnPrimary}>
               Найти стол
             </Link>
             <button className={styles.btnGhost} onClick={scrollToHow}>
@@ -232,7 +228,7 @@ export default function HomePage() {
             <div className={styles.sectionLabel}>Популярные места</div>
             <div className={styles.sectionTitle}>Рестораны Алматы</div>
           </div>
-          <Link href="#" className={styles.sectionLink}>Все рестораны →</Link>
+          <Link href="/catalog" className={styles.sectionLink}>Все рестораны →</Link>
         </div>
 
         <div className={styles.restaurantsGrid}>
@@ -286,8 +282,6 @@ export default function HomePage() {
           ))}
         </div>
       </section>
-
-      <Footer />
     </>
   )
 }

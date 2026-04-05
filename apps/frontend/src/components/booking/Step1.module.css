@@ -1,0 +1,10 @@
+.step { display: flex; flex-direction: column; gap: 24px; }
+.info { padding: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+.restaurantName { font-family: var(--font-cormorant, 'Cormorant Garamond', serif); font-size: 24px; font-weight: 600; margin: 0 0 12px; color: var(--text); }
+.details { display: flex; gap: 20px; font-size: 14px; color: var(--text-sec); }
+.noRestaurant, .noTables { text-align: center; padding: 40px; color: var(--text-muted); }
+.backLink { color: var(--primary); text-decoration: none; }
+.actions { display: flex; justify-content: space-between; align-items: center; padding-top: 8px; }
+.backBtn { color: var(--text-sec); text-decoration: none; font-size: 14px; }
+.nextBtn { padding: 14px 28px; background: var(--primary); color: #fff; border: none; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; }
+.nextBtn:disabled { opacity: 0.5; cursor: not-allowed; }

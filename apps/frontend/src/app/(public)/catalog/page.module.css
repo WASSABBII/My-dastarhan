@@ -1,0 +1,17 @@
+.page { padding: 40px 0 80px; max-width: 1280px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+.header { margin-bottom: 32px; }
+.title { font-family: var(--font-cormorant, 'Cormorant Garamond', serif); font-size: 40px; font-weight: 600; color: var(--text); margin: 0 0 8px; }
+.subtitle { color: var(--text-sec); font-size: 15px; margin: 0; }
+.layout { display: grid; grid-template-columns: 260px 1fr; gap: 32px; }
+.sidebar { position: sticky; top: 80px; align-self: start; }
+.main { }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.loadingGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.skeleton { height: 260px; background: var(--border); border-radius: 16px; animation: pulse 1.5s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+.empty { text-align: center; padding: 80px 20px; color: var(--text-muted); }
+.pagination { display: flex; gap: 8px; justify-content: center; margin-top: 40px; }
+.pageBtn { width: 36px; height: 36px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); color: var(--text); cursor: pointer; font-size: 14px; }
+.pageBtn.activePage { background: var(--primary); color: #fff; border-color: var(--primary); }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .sidebar { position: static; } .grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
