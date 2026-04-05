@@ -14,6 +14,7 @@ import { CreateBookingDto } from './dto/booking.dto';
 import { AvailabilityService } from './availability.service';
 import { BookingsGateway } from '../../gateways/bookings.gateway';
 import { QueuesService } from '../queues/queues.service';
+import { NotificationsService } from '../notifications/notifications.service';
 import { addMinutes } from '../../common/utils/time.util';
 
 @Injectable()
@@ -25,6 +26,7 @@ export class BookingsService {
     private availabilityService: AvailabilityService,
     private gateway: BookingsGateway,
     private queuesService: QueuesService,
+    private notificationsService: NotificationsService,
   ) {}
 
   async createBooking(dto: CreateBookingDto, clientId: string): Promise<Booking> {
@@ -88,7 +90,7 @@ export class BookingsService {
       return fullBooking;
     });
 
-    // After transaction: notify socket + schedule queues
+    // After transaction: notify socket + schedule queues + send confirmation
     for (const bt of booking.booking_tables) {
       this.gateway.notifyTableStatusChanged({
         restaurantId: booking.restaurant_id,
@@ -98,9 +100,9 @@ export class BookingsService {
         status: 'busy',
       });
     }
-    await this.queuesService.scheduleReminders(booking).catch(() => {
-      /* non-critical */
-    });
+    await this.queuesService.scheduleReminders(booking).catch(() => { /* non-critical */ });
+    await this.queuesService.scheduleReviewRequest(booking).catch(() => { /* non-critical */ });
+    this.notificationsService.send(booking, 'booking-confirmed').catch(() => { /* non-critical */ });
 
     return booking;
   }
@@ -116,7 +118,7 @@ export class BookingsService {
   async getByToken(token: string): Promise<Booking> {
     const booking = await this.bookingsRepo.findOne({
       where: { cancel_token: token },
-      relations: ['restaurant', 'booking_tables', 'booking_tables.table'],
+      relations: ['restaurant', 'client', 'booking_tables', 'booking_tables.table'],
     });
     if (!booking) throw new NotFoundException('Бронирование не найдено');
     return booking;
@@ -139,6 +141,17 @@ export class BookingsService {
       });
     }
     return saved;
+  }
+
+  async findById(id: string): Promise<Booking | null> {
+    return this.bookingsRepo.findOne({
+      where: { id },
+      relations: ['client', 'restaurant', 'booking_tables'],
+    });
+  }
+
+  async saveBooking(booking: Booking): Promise<Booking> {
+    return this.bookingsRepo.save(booking);
   }
 
   async cancelByAuth(id: string, clientId: string): Promise<Booking> {

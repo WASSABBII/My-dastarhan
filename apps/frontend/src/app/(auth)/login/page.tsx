@@ -370,6 +370,7 @@ function RestaurantLoginForm() {
 function LoginPageInner() {
   const searchParams = useSearchParams()
   const router = useRouter()
+  const redirectTo = searchParams.get('redirect') || '/'
   const [authType, setAuthType] = useState<AuthType>(
     searchParams.get('type') === 'rest' ? 'rest' : 'user'
   )
@@ -808,9 +809,9 @@ function LoginPageInner() {
               <div className={styles.successSubtitle}>
                 Вы вошли в аккаунт. Теперь можно бронировать столики в любимых ресторанах Алматы.
               </div>
-              <Link href="/" className={styles.goBtn}>
-                Найти ресторан →
-              </Link>
+              <button className={styles.goBtn} onClick={() => router.push(redirectTo)}>
+                {redirectTo === '/' ? 'Найти ресторан →' : 'Продолжить →'}
+              </button>
             </div>
           )}
 

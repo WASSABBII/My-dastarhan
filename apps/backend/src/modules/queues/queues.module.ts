@@ -15,7 +15,12 @@ import { QueuesService } from './queues.service';
         },
       }),
     }),
-    BullModule.registerQueue({ name: 'send_reminder' }, { name: 'end_reminder' }),
+    BullModule.registerQueue(
+      { name: 'send_reminder' },
+      { name: 'end_reminder' },
+      { name: 'review_request' },
+      { name: 'operator_alert' },
+    ),
   ],
   providers: [QueuesService],
   exports: [QueuesService],
