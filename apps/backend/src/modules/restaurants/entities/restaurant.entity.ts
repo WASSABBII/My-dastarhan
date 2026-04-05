@@ -1,4 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  OneToMany,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+import { RestaurantGroup } from './restaurant-group.entity';
+import { RestaurantPhoto } from './restaurant-photo.entity';
 
 export enum RestaurantStatus {
   PENDING = 'pending',
@@ -13,6 +23,10 @@ export class Restaurant {
 
   @Column({ nullable: true })
   group_id: string;
+
+  @ManyToOne(() => RestaurantGroup, { nullable: true })
+  @JoinColumn({ name: 'group_id' })
+  group: RestaurantGroup;
 
   @Column()
   name: string;
@@ -59,6 +73,12 @@ export class Restaurant {
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   deposit_amount: number;
 
+  @Column({ nullable: true })
+  district: string;
+
+  @Column({ nullable: true })
+  cover_photo_url: string;
+
   @Column({
     type: 'enum',
     enum: RestaurantStatus,
@@ -68,4 +88,7 @@ export class Restaurant {
 
   @CreateDateColumn()
   created_at: Date;
+
+  @OneToMany(() => RestaurantPhoto, (photo) => photo.restaurant)
+  photos: RestaurantPhoto[];
 }

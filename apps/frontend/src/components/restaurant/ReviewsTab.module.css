@@ -1,0 +1,4 @@
+.placeholder { text-align: center; padding: 80px 20px; }
+.icon { font-size: 48px; margin-bottom: 16px; }
+.title { font-family: var(--font-cormorant, 'Cormorant Garamond', serif); font-size: 24px; color: var(--text); margin: 0 0 12px; }
+.text { color: var(--text-sec); font-size: 14px; margin: 0; }

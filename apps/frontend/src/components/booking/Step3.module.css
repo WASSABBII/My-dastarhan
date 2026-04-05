@@ -1,0 +1,23 @@
+.step { display: flex; flex-direction: column; gap: 24px; }
+.title { font-family: var(--font-cormorant, 'Cormorant Garamond', serif); font-size: 28px; font-weight: 600; color: var(--text); margin: 0; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+.restaurantName { font-family: var(--font-cormorant, 'Cormorant Garamond', serif); font-size: 22px; margin: 0 0 20px; color: var(--text); }
+.rows { display: flex; flex-direction: column; gap: 12px; }
+.row { display: flex; justify-content: space-between; font-size: 15px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.row:last-child { border-bottom: none; padding-bottom: 0; }
+.row span:first-child { color: var(--text-sec); }
+.row span:last-child { font-weight: 500; color: var(--text); }
+.terms { }
+.checkLabel { display: flex; gap: 12px; align-items: flex-start; cursor: pointer; font-size: 14px; color: var(--text-sec); line-height: 1.5; }
+.errorBox { padding: 14px 16px; background: rgba(230,57,34,0.1); border: 1px solid rgba(230,57,34,0.3); border-radius: 10px; color: var(--primary); font-size: 14px; }
+.actions { display: flex; justify-content: space-between; }
+.backBtn { padding: 12px 20px; border: 1px solid var(--border); border-radius: 10px; background: var(--card); color: var(--text-sec); cursor: pointer; font-size: 14px; }
+.confirmBtn { padding: 14px 28px; background: var(--primary); color: #fff; border: none; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; }
+.confirmBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+.success { text-align: center; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.successIcon { width: 64px; height: 64px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 28px; }
+.successTitle { font-family: var(--font-cormorant, 'Cormorant Garamond', serif); font-size: 32px; color: var(--text); margin: 0; }
+.bookingCode { font-family: monospace; font-size: 28px; font-weight: 700; color: var(--primary); letter-spacing: 4px; }
+.successText { color: var(--text-sec); font-size: 15px; margin: 0; }
+.cancelLink { color: var(--text-muted); font-size: 13px; }
+.homeBtn { padding: 14px 28px; background: var(--primary); color: #fff; border-radius: 12px; text-decoration: none; font-size: 15px; font-weight: 600; }

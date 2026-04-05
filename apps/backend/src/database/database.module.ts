@@ -6,10 +6,13 @@ import { Client } from '../modules/clients/entities/client.entity';
 import { Restaurant } from '../modules/restaurants/entities/restaurant.entity';
 import { RestaurantPhoto } from '../modules/restaurants/entities/restaurant-photo.entity';
 import { RestaurantUser } from '../modules/restaurants/entities/restaurant-user.entity';
+import { RestaurantGroup } from '../modules/restaurants/entities/restaurant-group.entity';
 import { Table } from '../modules/tables/entities/table.entity';
 import { Subscription } from '../modules/subscriptions/entities/subscription.entity';
 import { MenuCategory } from '../modules/menu/entities/menu-category.entity';
 import { MenuItem } from '../modules/menu/entities/menu-item.entity';
+import { Booking } from '../modules/bookings/entities/booking.entity';
+import { BookingTable } from '../modules/bookings/entities/booking-table.entity';
 
 @Module({
   imports: [
@@ -29,10 +32,13 @@ import { MenuItem } from '../modules/menu/entities/menu-item.entity';
           Restaurant,
           RestaurantPhoto,
           RestaurantUser,
+          RestaurantGroup,
           Table,
           Subscription,
           MenuCategory,
           MenuItem,
+          Booking,
+          BookingTable,
         ],
         synchronize: true, // только для dev, в проде — миграции
         logging: false,
