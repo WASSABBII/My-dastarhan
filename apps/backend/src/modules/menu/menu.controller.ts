@@ -10,7 +10,7 @@ export class MenuController {
 
   @Get()
   getMenu(@Query('restaurantId') restaurantId: string) {
-    return this.service.getMenu(restaurantId);
+    return this.service.getMenuAdmin(restaurantId);
   }
 
   @Post('categories')

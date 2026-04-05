@@ -1,0 +1,216 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.toolbarLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.dateInput {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: var(--font-jost), sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  background: var(--card);
+  cursor: pointer;
+  outline: none;
+}
+
+.dateInput:focus {
+  border-color: var(--primary);
+}
+
+.statusFilters {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.sf {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 6px 14px;
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 150ms;
+  font-family: var(--font-jost), sans-serif;
+}
+
+.sf:hover {
+  border-color: var(--text-muted);
+  color: var(--text-sec);
+}
+
+.sf.active {
+  color: white;
+  border-color: transparent;
+}
+
+.sfAll.active   { background: var(--text); }
+.sfPending.active    { background: #f59e0b; }
+.sfConfirmed.active  { background: #3b82f6; }
+.sfArrived.active    { background: #10b981; }
+.sfNoshow.active     { background: #ef4444; }
+.sfCancelled.active  { background: #9ca3af; }
+
+.addBtn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font-jost), sans-serif;
+  cursor: pointer;
+  transition: opacity 150ms;
+  white-space: nowrap;
+}
+
+.addBtn:hover {
+  opacity: 0.88;
+}
+
+/* TABLE */
+.tableWrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead tr {
+  border-bottom: 1px solid var(--border);
+}
+
+.table thead th {
+  padding: 12px 16px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-align: left;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.table tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background 150ms;
+}
+
+.table tbody tr:last-child {
+  border: none;
+}
+
+.table tbody tr:hover {
+  background: var(--bg);
+}
+
+.table tbody td {
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--text-sec);
+}
+
+.tdName {
+  font-weight: 500;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.tdPhone {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.tdTime {
+  font-weight: 500;
+  color: var(--text);
+}
+
+/* STATUS PILLS */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 100px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.pillDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.pillPending   { background: #fef3c7; color: #92400e; }
+.pillConfirmed { background: #dbeafe; color: #1e40af; }
+.pillArrived   { background: #d1fae5; color: #065f46; }
+.pillCancelled { background: #f3f4f6; color: #6b7280; }
+.pillNoshow    { background: #fee2e2; color: #991b1b; }
+.pillExtended  { background: #ede9fe; color: #5b21b6; }
+
+/* ACTION BUTTONS */
+.actionBtn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-family: var(--font-jost), sans-serif;
+  font-size: 11px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 150ms;
+  margin-right: 4px;
+}
+
+.actionBtn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.actionBtnGreen {
+  border-color: #10b981;
+  color: #10b981;
+}
+
+.actionBtnGreen:hover {
+  background: #10b981;
+  color: white;
+}
+
+/* EMPTY + LOADING */
+.empty {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.loading {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--text-muted);
+  font-size: 13px;
+}

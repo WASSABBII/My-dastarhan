@@ -154,6 +154,35 @@ export class BookingsService {
     return this.bookingsRepo.save(booking);
   }
 
+  async getByRestaurantAndDate(restaurantId: string, date: string): Promise<Booking[]> {
+    return this.bookingsRepo.find({
+      where: { restaurant_id: restaurantId, date },
+      relations: ['client', 'booking_tables', 'booking_tables.table'],
+      order: { time_start: 'ASC' },
+    });
+  }
+
+  async updateStatus(id: string, status: BookingStatus): Promise<Booking> {
+    const booking = await this.bookingsRepo.findOne({
+      where: { id },
+      relations: ['booking_tables'],
+    });
+    if (!booking) throw new NotFoundException('Бронирование не найдено');
+    booking.status = status;
+    const saved = await this.bookingsRepo.save(booking);
+    for (const bt of booking.booking_tables) {
+      const tableStatus = [BookingStatus.CANCELLED, BookingStatus.NO_SHOW].includes(status) ? 'free' : 'busy';
+      this.gateway.notifyTableStatusChanged({
+        restaurantId: booking.restaurant_id,
+        tableId: bt.table_id,
+        date: booking.date,
+        time: booking.time_start,
+        status: tableStatus,
+      });
+    }
+    return saved;
+  }
+
   async cancelByAuth(id: string, clientId: string): Promise<Booking> {
     const booking = await this.bookingsRepo.findOne({
       where: { id },

@@ -28,6 +28,22 @@ export class MenuService {
     return result;
   }
 
+  async getMenuAdmin(restaurantId: string) {
+    const categories = await this.categoriesRepo.find({
+      where: { restaurant_id: restaurantId },
+      order: { sort_order: 'ASC' },
+    });
+    const result = await Promise.all(
+      categories.map(async (cat) => ({
+        ...cat,
+        items: await this.itemsRepo.find({
+          where: { category_id: cat.id },
+        }),
+      })),
+    );
+    return result;
+  }
+
   async createCategory(dto: CreateCategoryDto): Promise<MenuCategory> {
     const cat = this.categoriesRepo.create(dto);
     return this.categoriesRepo.save(cat);
