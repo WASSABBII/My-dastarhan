@@ -23,10 +23,11 @@ export default function RestaurantPage() {
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null)
   const [photos, setPhotos] = useState<RestaurantPhoto[]>([])
   const [categories, setCategories] = useState<MenuCategory[]>([])
+  const today = new Date().toISOString().split('T')[0]
   const [activeTab, setActiveTab] = useState<TabId>('about')
   const [availability, setAvailability] = useState<TableAvailability[]>([])
-  const [bookingDate, setBookingDate] = useState(searchParams.get('date') || '')
-  const [bookingTime, setBookingTime] = useState(searchParams.get('time') || '')
+  const [bookingDate, setBookingDate] = useState(searchParams.get('date') || today)
+  const [bookingTime, setBookingTime] = useState(searchParams.get('time') || '19:00')
   const [bookingGuests, setBookingGuests] = useState(2)
   const [loadingAvail, setLoadingAvail] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -52,11 +53,8 @@ export default function RestaurantPage() {
     load()
   }, [slug])
 
-  const handleSearch = async (date: string, time: string, guests: number) => {
-    setBookingDate(date)
-    setBookingTime(time)
-    setBookingGuests(guests)
-    setActiveTab('booking')
+  const fetchAvailability = async (date: string, time: string) => {
+    if (!date || !time) return
     setLoadingAvail(true)
     try {
       const res = await getAvailability(slug, date, time, store.duration)
@@ -66,6 +64,21 @@ export default function RestaurantPage() {
     } finally {
       setLoadingAvail(false)
     }
+  }
+
+  const handleTabChange = (tab: TabId) => {
+    setActiveTab(tab)
+    if (tab === 'booking' && availability.length === 0) {
+      fetchAvailability(bookingDate, bookingTime)
+    }
+  }
+
+  const handleSearch = async (date: string, time: string, guests: number) => {
+    setBookingDate(date)
+    setBookingTime(time)
+    setBookingGuests(guests)
+    setActiveTab('booking')
+    await fetchAvailability(date, time)
   }
 
   const handleTableClick = (tableId: string) => {
@@ -103,7 +116,7 @@ export default function RestaurantPage() {
 
       <div className={styles.layout}>
         <div className={styles.main}>
-          <RestaurantTabs activeTab={activeTab} onChange={setActiveTab} />
+          <RestaurantTabs activeTab={activeTab} onChange={handleTabChange} />
 
           {activeTab === 'about' && (
             <div className={styles.aboutTab}>
