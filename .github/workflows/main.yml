@@ -61,3 +61,4 @@ jobs:
             Статус: ${{ job.status == 'success' && '✅ Успешно' || '❌ Ошибка' }}
             Событие: Push в main
             Результат: Security и Health Check завершены.
+# Final trigger
