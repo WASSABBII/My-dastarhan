@@ -25,7 +25,13 @@ services:
       - postgres
       - redis
     environment:
-      DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/${DB_NAME}
+      # Передаем именно те ключи, которые ищет твой код:
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_USER: ${DB_USER:-user}
+      DATABASE_PASSWORD: ${DB_PASSWORD:-password}
+      DATABASE_NAME: ${DB_NAME:-dastarhan}
+      # Redis тоже подправь для надежности
       REDIS_HOST: redis
       REDIS_PORT: 6379
     ports:
