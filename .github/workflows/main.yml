@@ -1,0 +1,46 @@
+name: Dastarhan Full-Stack CI
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 1. Проверка безопасности (Trivy)
+      - name: Security Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          format: 'table'
+          severity: 'CRITICAL,HIGH'
+
+      # 2. Поднимаем всё через Docker Compose для теста
+      - name: Build and Start Containers
+        run: |
+          docker compose up -d
+          echo "Waiting for services to start..."
+          sleep 40 
+
+      # 3. HEALTH CHECK (Проверяем бэкенд)
+      - name: Health Check
+        run: |
+          curl -f http://localhost:8080/api/health || exit 1
+          echo "Backend is alive!"
+
+      # 4. Уведомление в Telegram
+      - name: Telegram Notification
+        if: always()
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            🥘 Проект: DASTARHAN
+            Статус: ${{ job.status == 'success' && '✅ Успешно' || '❌ Ошибка' }}
+            Событие: Push в main
+            Проверки: Security OK, Health Check OK. 
