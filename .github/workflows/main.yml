@@ -29,8 +29,16 @@ jobs:
       # 3. HEALTH CHECK (Проверяем бэкенд)
       - name: Health Check
         run: |
-          curl -f http://localhost:8080/api/health || exit 1
-          echo "Backend is alive!"
+          for i in {1..6}; do
+            if curl -s http://localhost:8080/api/health; then
+              echo "Backend is alive!"
+              exit 0
+            fi
+            echo "Waiting for backend... (attempt $i)"
+            sleep 5
+          done
+          echo "Backend failed to start in time"
+          exit 1  
 
       # 4. Уведомление в Telegram
       - name: Telegram Notification
