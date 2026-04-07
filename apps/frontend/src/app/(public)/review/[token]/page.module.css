@@ -1,0 +1,157 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  padding: 24px;
+}
+
+.loading {
+  text-align: center;
+  color: var(--text-sec);
+  font-size: 14px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 40px 36px;
+  max-width: 440px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: var(--text-sec);
+}
+
+.iconGreen {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #d1fae5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: #10b981;
+}
+
+.restaurantName {
+  font-family: var(--font-cormorant), serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.visitInfo {
+  font-size: 13px;
+  color: var(--text-sec);
+  margin-top: -8px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.sub {
+  font-size: 14px;
+  color: var(--text-sec);
+  line-height: 1.6;
+}
+
+/* Stars */
+.starsRow {
+  display: flex;
+  gap: 6px;
+}
+
+.star {
+  background: none;
+  border: none;
+  font-size: 36px;
+  color: var(--border);
+  cursor: pointer;
+  padding: 0;
+  transition: color 100ms, transform 100ms;
+  line-height: 1;
+}
+
+.star:hover,
+.starOn {
+  color: #f59e0b;
+  transform: scale(1.1);
+}
+
+.ratingLabel {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-sec);
+  margin-top: -8px;
+}
+
+/* Textarea */
+.textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-family: var(--font-jost), sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  resize: vertical;
+  outline: none;
+  transition: border-color 150ms;
+  box-sizing: border-box;
+}
+
+.textarea:focus {
+  border-color: var(--text);
+}
+
+.error {
+  font-size: 13px;
+  color: #e63922;
+}
+
+.submitBtn {
+  width: 100%;
+  background: #1a1a1a;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font-jost), sans-serif;
+  cursor: pointer;
+  transition: opacity 150ms;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: #e63922;
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

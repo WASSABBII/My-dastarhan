@@ -10,6 +10,7 @@ import MenuTab from '@/components/restaurant/MenuTab'
 import ReviewsTab from '@/components/restaurant/ReviewsTab'
 import FloorPlan from '@/components/floor-plan/FloorPlan'
 import { useBookingStore } from '@/store/booking.store'
+import ChatWidget from './ChatWidget'
 import styles from './page.module.css'
 
 type TabId = 'about' | 'menu' | 'booking' | 'reviews'
@@ -170,6 +171,8 @@ export default function RestaurantPage() {
           <BookingWidget onSearch={handleSearch} />
         </aside>
       </div>
+
+      <ChatWidget slug={slug} restaurantName={restaurant.name} />
     </div>
   )
 }

@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards, Res } from '@nestjs/common';
+import type { Response } from 'express';
 import { TablesService } from './tables.service';
 import { CreateTableDto, UpdateTableDto } from './dto/table.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -26,5 +27,15 @@ export class TablesController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.service.remove(id);
+  }
+
+  @Get(':id/qr')
+  async getQr(@Param('id') id: string, @Res() res: Response) {
+    const buffer = await this.service.generateQr(id);
+    res.set({
+      'Content-Type': 'image/png',
+      'Content-Disposition': `inline; filename="table-${id}.png"`,
+    });
+    res.send(buffer);
   }
 }

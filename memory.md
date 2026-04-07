@@ -47,7 +47,6 @@ cd apps/backend && npm run seed   # тестовые данные
 - `/catalog` — список активных ресторанов, пагинация, фильтры
 - `/[slug]` — страница ресторана: инфо, меню, интерактивный план зала SVG, бронирование
 - `/booking` — 3-шаговый визард бронирования
-- `/admin` — заглушка кабинета ресторана ("в разработке")
 - `Navbar` — аватар с буквой имени когда залогинен, дропдаун (история + выход); "Войти" и "Для ресторанов" скрыты когда залогинен
 - `Step2` бронирования — авто-заполнение имени/телефона из профиля; если не залогинен → редирект на `/login?redirect=/booking`
 
@@ -90,6 +89,34 @@ cd apps/backend && npm run seed   # тестовые данные
 
 ---
 
+## Фаза 4 ✅ — Кабинет ресторана
+
+### Frontend `/admin`
+- Layout: тёмный sidebar (180px) + topbar, дизайн из `.docs/design/dastarkhan/admin.html`
+- `/admin` → редирект на `/admin/bookings`
+- `/admin/bookings` — таблица броней по дате, фильтры по статусу, смена статуса кнопками
+- `/admin/tables` — CRUD столиков (форма: label, capacity, location_tag, shape)
+- `/admin/menu` — аккордеон категорий + CRUD блюд
+- `/admin/settings` — форма настроек ресторана (name, address, phone, cuisine_type, buffer_minutes и др.)
+
+### Frontend `/account`
+- История броней клиента (`GET /api/bookings/my`)
+- Кнопка отмены для pending/confirmed броней
+- Редирект на `/login?redirect=/account` если не залогинен
+
+### Backend (новые эндпоинты)
+- `GET /api/bookings/admin?restaurantId=&date=` [JwtAuthGuard] — брони ресторана по дате
+- `PATCH /api/bookings/admin/:id/status` [JwtAuthGuard] — смена статуса
+- `GET /api/admin/menu` → `getMenuAdmin()` — все категории и блюда (включая неактивные)
+
+### Важный баг (зафиксировано)
+- `ValidationPipe({ forbidNonWhitelisted: true })` → при создании нельзя слать лишние поля
+- `CreateTableDto` не имеет `is_active` → при создании не отправлять
+- `CreateMenuItemDto` не имеет `is_available` → при создании не отправлять
+- Всегда разделять тело запроса для POST (create) и PATCH (update)
+
+---
+
 ## Конфиги
 - `apps/backend/.env` — DATABASE, REDIS, JWT, PORT=3005, Twilio (пусто), Telegram (пусто)
 - `apps/frontend/.env.local` — `NEXT_PUBLIC_API_URL=http://localhost:3005/api`
@@ -100,7 +127,5 @@ cd apps/backend && npm run seed   # тестовые данные
 ---
 
 ## Что дальше
-
-**Фаза 4** — Кабинет ресторана (`/admin`): kanban броней, редактор столиков, меню, сотрудники, статистика
 
 **Фаза 5** — AI-чат (Claude Haiku), отзывы, Google Places, QR-коды, SuperAdmin, подписки, личный кабинет клиента `/account`

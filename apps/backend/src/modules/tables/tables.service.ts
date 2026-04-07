@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as QRCode from 'qrcode';
 import { Table } from './entities/table.entity';
 import { CreateTableDto, UpdateTableDto } from './dto/table.dto';
 
@@ -28,5 +29,16 @@ export class TablesService {
 
   async remove(id: string): Promise<void> {
     await this.tablesRepo.update(id, { is_active: false });
+  }
+
+  async generateQr(tableId: string): Promise<Buffer> {
+    const table = await this.tablesRepo.findOne({
+      where: { id: tableId },
+      relations: ['restaurant'],
+    });
+    if (!table) throw new NotFoundException('Столик не найден');
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const url = `${frontendUrl}/${table.restaurant.slug}?table=${encodeURIComponent(table.label)}`;
+    return QRCode.toBuffer(url, { width: 300, margin: 2 });
   }
 }
