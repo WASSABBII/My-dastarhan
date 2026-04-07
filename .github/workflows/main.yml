@@ -30,14 +30,15 @@ jobs:
       - name: Health Check
         run: |
           for i in {1..10}; do
+            # Проверяем именно /api/health
             if curl -s http://localhost:8080/api/health; then
-              echo "✅ Backend is alive!"
+              echo "✅ Backend is alive and healthy!"
               exit 0
             fi
             echo "Waiting for backend... (attempt $i)"
             sleep 10
           done
-          echo "❌ Backend failed to start in time"
+          echo "❌ Backend check failed"
           docker compose logs backend
           exit 1
 
