@@ -18,18 +18,20 @@ async function bootstrap() {
     }),
   );
 
+  // Настройка CORS для работы с Vercel и локальной разработкой
   app.enableCors({
     origin: [
       'http://localhost:3000',
-      'http://localhost:3002',
-      'http://localhost:3003',
-      'http://localhost:3005',
+      'https://my-dastarhan.vercel.app', // Твой основной домен фронтенда
+      /\.vercel\.app$/,                 // Разрешить превью-деплои Vercel
     ],
     credentials: true,
   });
 
-  const port = process.env.PORT ?? 3001;
-  await app.listen(port);
-  console.log(`Backend running on http://localhost:${port}/api`);
+  // В Railway PORT подставляется автоматически через переменную окружения
+  const port = process.env.PORT || 3001;
+  await app.listen(port, '0.0.0.0'); // Добавлении '0.0.0.0' для корректной работы в Docker/Railway
+  
+  console.log(`Backend is running on port: ${port}`);
 }
 bootstrap();

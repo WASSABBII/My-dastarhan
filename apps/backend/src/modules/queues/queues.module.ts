@@ -12,6 +12,7 @@ import { QueuesService } from './queues.service';
         connection: {
           host: config.get('redis.host') || 'localhost',
           port: config.get('redis.port') || 6379,
+          password: config.get('redis.password'), // Добавлено для авторизации в облаке
         },
       }),
     }),
