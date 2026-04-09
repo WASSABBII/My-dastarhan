@@ -1,5 +1,5 @@
 services:
-  # Основная база данных
+  # Основная база данных c 
   postgres:
     image: postgres:15-alpine
     restart: always
