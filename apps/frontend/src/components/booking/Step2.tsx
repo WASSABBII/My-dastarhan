@@ -103,8 +103,18 @@ export default function Step2() {
       </div>
 
       <div className={styles.actions}>
-        <button className={styles.backBtn} onClick={() => store.setStep(1)}>← Назад</button>
-        <button className={styles.nextBtn} onClick={handleNext}>Продолжить →</button>
+        <button className={styles.backBtn} onClick={() => store.setStep(1)}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" />
+          </svg>
+          Назад
+        </button>
+        <button className={styles.nextBtn} onClick={handleNext}>
+          Продолжить
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+            <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
+          </svg>
+        </button>
       </div>
     </div>
   )

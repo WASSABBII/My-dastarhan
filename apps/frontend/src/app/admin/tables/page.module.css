@@ -5,6 +5,27 @@
   margin-bottom: 20px;
 }
 
+.viewToggle {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.viewBtn {
+  padding: 7px 16px;
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  font-family: var(--font-jost), sans-serif;
+  color: var(--text-sec);
+  cursor: pointer;
+  transition: background 150ms;
+}
+
+.viewBtn:hover { background: var(--bg); }
+.viewActive { background: var(--text) !important; color: var(--bg) !important; }
+
 .addBtn {
   background: var(--primary);
   color: white;

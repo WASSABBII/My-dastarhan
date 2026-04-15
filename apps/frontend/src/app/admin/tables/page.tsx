@@ -1,7 +1,10 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
+import dynamic from 'next/dynamic'
 import styles from './page.module.css'
+
+const FloorPlanEditor = dynamic(() => import('@/components/floor-plan/FloorPlanEditor'), { ssr: false })
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3005/api'
 
@@ -11,6 +14,8 @@ interface Table {
   capacity: number
   location_tag?: string
   shape: 'round' | 'square' | 'rectangle'
+  pos_x: number
+  pos_y: number
   is_active: boolean
 }
 
@@ -24,12 +29,15 @@ const emptyForm = { label: '', capacity: 2, location_tag: '', shape: 'square' as
 export default function AdminTablesPage() {
   const [tables, setTables] = useState<Table[]>([])
   const [restaurantId, setRestaurantId] = useState<string | null>(null)
+  const [viewMode, setViewMode] = useState<'list' | 'plan'>('list')
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState<Table | null>(null)
   const [form, setForm] = useState(emptyForm)
   const [qrTable, setQrTable] = useState<Table | null>(null)
 
   useEffect(() => {
+    const saved = localStorage.getItem('activeRestaurantId')
+    if (saved) { setRestaurantId(saved); return }
     fetch(`${API}/admin/restaurant`, { headers: authHeader() })
       .then(r => r.json())
       .then(data => {
@@ -89,6 +97,7 @@ export default function AdminTablesPage() {
   }
 
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null)
+  const qrBlobUrl = useRef('')
 
   useEffect(() => {
     if (!qrTable) { setQrDataUrl(null); return }
@@ -97,8 +106,12 @@ export default function AdminTablesPage() {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(r => r.blob())
-      .then(blob => setQrDataUrl(URL.createObjectURL(blob)))
+      .then(blob => {
+        qrBlobUrl.current = URL.createObjectURL(blob)
+        setQrDataUrl(qrBlobUrl.current)
+      })
       .catch(() => {})
+    return () => { if (qrBlobUrl.current) { URL.revokeObjectURL(qrBlobUrl.current); qrBlobUrl.current = '' } }
   }, [qrTable])
 
   return (
@@ -124,8 +137,23 @@ export default function AdminTablesPage() {
       )}
 
       <div className={styles.header}>
-        <div />
-        <button className={styles.addBtn} onClick={openAdd}>+ Добавить столик</button>
+        <div className={styles.viewToggle}>
+          <button
+            className={`${styles.viewBtn} ${viewMode === 'list' ? styles.viewActive : ''}`}
+            onClick={() => setViewMode('list')}
+          >
+            Список
+          </button>
+          <button
+            className={`${styles.viewBtn} ${viewMode === 'plan' ? styles.viewActive : ''}`}
+            onClick={() => setViewMode('plan')}
+          >
+            План зала
+          </button>
+        </div>
+        {viewMode === 'list' && (
+          <button className={styles.addBtn} onClick={openAdd}>+ Добавить столик</button>
+        )}
       </div>
 
       {showForm && (
@@ -172,7 +200,11 @@ export default function AdminTablesPage() {
         </div>
       )}
 
-      <div className={styles.tableWrap}>
+      {viewMode === 'plan' && (
+        <FloorPlanEditor tables={tables} onSaved={load} />
+      )}
+
+      {viewMode === 'list' && <div className={styles.tableWrap}>
         {tables.length === 0 ? (
           <div className={styles.empty}>Столиков нет. Добавьте первый.</div>
         ) : (
@@ -209,7 +241,7 @@ export default function AdminTablesPage() {
             </tbody>
           </table>
         )}
-      </div>
+      </div>}
     </div>
   )
 }

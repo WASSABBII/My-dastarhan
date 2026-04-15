@@ -28,11 +28,14 @@ export default function RestaurantCard({ restaurant, date, time, index = 0 }: Re
 
   return (
     <Link href={href} className={styles.card}>
-      <div className={styles.image} style={{ background: restaurant.cover_photo_url ? undefined : gradient }}>
-        {restaurant.cover_photo_url
-          ? <img src={restaurant.cover_photo_url} alt={restaurant.name} className={styles.photo} />
-          : <span className={styles.emoji}>{emoji}</span>
-        }
+      <div className={styles.image}>
+        {restaurant.cover_photo_url ? (
+          <img src={restaurant.cover_photo_url} alt={restaurant.name} className={styles.photo} />
+        ) : (
+          <div className={styles.gradientBg} style={{ background: gradient }}>
+            <span className={styles.emoji}>{emoji}</span>
+          </div>
+        )}
         <span className={`${styles.badge} ${styles.free}`}>Есть места</span>
       </div>
       <div className={styles.body}>

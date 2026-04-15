@@ -1,7 +1,10 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import dynamic from 'next/dynamic'
 import styles from './page.module.css'
+
+const BookingKanban = dynamic(() => import('@/components/admin/BookingKanban'), { ssr: false })
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3005/api'
 
@@ -60,6 +63,7 @@ export default function AdminBookingsPage() {
   const [date, setDate] = useState(todayISO())
   const [filter, setFilter] = useState('all')
   const [loading, setLoading] = useState(false)
+  const [viewMode, setViewMode] = useState<'table' | 'kanban'>('table')
 
   // Load restaurant id once
   useEffect(() => {
@@ -112,26 +116,48 @@ export default function AdminBookingsPage() {
             value={date}
             onChange={e => setDate(e.target.value)}
           />
-          <div className={styles.statusFilters}>
-            {FILTERS.map(f => (
-              <button
-                key={f.key}
-                className={`${styles.sf} ${f.cls} ${filter === f.key ? styles.active : ''}`}
-                onClick={() => setFilter(f.key)}
-              >
-                {f.label}
-              </button>
-            ))}
-          </div>
+          {viewMode === 'table' && (
+            <div className={styles.statusFilters}>
+              {FILTERS.map(f => (
+                <button
+                  key={f.key}
+                  className={`${styles.sf} ${f.cls} ${filter === f.key ? styles.active : ''}`}
+                  onClick={() => setFilter(f.key)}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
-        <button className={styles.addBtn} onClick={loadBookings}>
-          ↻ Обновить
-        </button>
+        <div className={styles.toolbarRight}>
+          <div className={styles.viewToggle}>
+            <button
+              className={`${styles.viewBtn} ${viewMode === 'table' ? styles.viewActive : ''}`}
+              onClick={() => setViewMode('table')}
+              title="Таблица"
+            >
+              ≡
+            </button>
+            <button
+              className={`${styles.viewBtn} ${viewMode === 'kanban' ? styles.viewActive : ''}`}
+              onClick={() => setViewMode('kanban')}
+              title="Канбан"
+            >
+              ⊞
+            </button>
+          </div>
+          <button className={styles.addBtn} onClick={loadBookings}>
+            ↻ Обновить
+          </button>
+        </div>
       </div>
 
       <div className={styles.tableWrap}>
         {loading ? (
           <div className={styles.loading}>Загрузка...</div>
+        ) : viewMode === 'kanban' ? (
+          <BookingKanban bookings={bookings} onStatusChange={updateStatus} />
         ) : visible.length === 0 ? (
           <div className={styles.empty}>Броней нет</div>
         ) : (

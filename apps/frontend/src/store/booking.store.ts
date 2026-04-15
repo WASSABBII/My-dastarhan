@@ -52,11 +52,16 @@ export const useBookingStore = create<BookingState>()((set) => ({
   setRestaurant: (restaurant) => set({ restaurant }),
   setDateTimeGuests: (date, time, guests) => set({ date, time, guests }),
   setDuration: (duration) => set({ duration }),
-  toggleTable: (id) => set((s) => ({
-    selectedTableIds: s.selectedTableIds.includes(id)
-      ? s.selectedTableIds.filter(t => t !== id)
-      : [...s.selectedTableIds, id]
-  })),
+  toggleTable: (id) => set((s) => {
+    const ta = s.availability.find(t => t.table.id === id)
+    // Запрещаем выбирать занятые столы
+    if (ta && ta.status === 'busy') return {}
+    return {
+      selectedTableIds: s.selectedTableIds.includes(id)
+        ? s.selectedTableIds.filter(t => t !== id)
+        : [...s.selectedTableIds, id]
+    }
+  }),
   setAvailability: (availability) => set({ availability }),
   setGuestDetails: (guestName, guestPhone, guestEmail, occasion) =>
     set({ guestName, guestPhone, guestEmail, occasion }),

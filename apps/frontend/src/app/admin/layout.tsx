@@ -1,9 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import styles from './layout.module.css'
+
+const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3005/api'
 
 const NAV_ITEMS = [
   {
@@ -63,6 +65,28 @@ const NAV_ITEMS = [
     ),
   },
   {
+    href: '/admin/staff',
+    label: 'Сотрудники',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg>
+    ),
+  },
+  {
+    href: '/admin/knowledge',
+    label: 'База знаний',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+      </svg>
+    ),
+  },
+  {
     href: '/admin/settings',
     label: 'Настройки',
     icon: (
@@ -77,11 +101,17 @@ const NAV_ITEMS = [
 const MONTHS = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря']
 const DAYS = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота']
 
+interface RestaurantItem { id: string; name: string }
+
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const router = useRouter()
   const [restaurantName, setRestaurantName] = useState('Мой ресторан')
+  const [restaurants, setRestaurants] = useState<RestaurantItem[]>([])
+  const [activeRestId, setActiveRestId] = useState<string | null>(null)
+  const [showRestDropdown, setShowRestDropdown] = useState(false)
   const [todayLabel, setTodayLabel] = useState('')
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -92,16 +122,40 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     const d = new Date()
     setTodayLabel(`${DAYS[d.getDay()]}, ${d.getDate()} ${MONTHS[d.getMonth()]}`)
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/restaurant`, {
+    fetch(`${API}/admin/restaurant`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(r => r.json())
       .then(data => {
-        const list = Array.isArray(data) ? data : []
-        if (list[0]?.name) setRestaurantName(list[0].name)
+        const list: RestaurantItem[] = Array.isArray(data) ? data : []
+        setRestaurants(list)
+        const savedId = localStorage.getItem('activeRestaurantId')
+        const active = list.find(r => r.id === savedId) || list[0]
+        if (active) {
+          setRestaurantName(active.name)
+          setActiveRestId(active.id)
+          localStorage.setItem('activeRestaurantId', active.id)
+        }
       })
       .catch(() => {})
   }, [router])
+
+  // close dropdown on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setShowRestDropdown(false)
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+
+  const switchRestaurant = (r: RestaurantItem) => {
+    localStorage.setItem('activeRestaurantId', r.id)
+    // full reload so all client-component useEffects re-run with new restaurantId
+    window.location.reload()
+  }
 
   const handleLogout = () => {
     localStorage.removeItem('token')
@@ -132,17 +186,33 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           ))}
         </nav>
 
-        <div className={styles.sidebarBottom}>
-          <div className={styles.restaurantInfo}>
+        <div className={styles.sidebarBottom} ref={dropdownRef}>
+          <div className={styles.restaurantInfo} onClick={() => restaurants.length > 1 && setShowRestDropdown(v => !v)} style={{ cursor: restaurants.length > 1 ? 'pointer' : 'default' }}>
             <div className={styles.riAvatar}>🏯</div>
-            <div>
-              <div className={styles.riName}>{restaurantName}</div>
+            <div style={{ flex: 1, overflow: 'hidden' }}>
+              <div className={styles.riName} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{restaurantName}</div>
               <div className={styles.riStatus}>
                 <span className={styles.statusDot} />
                 Открыто
               </div>
             </div>
+            {restaurants.length > 1 && (
+              <span style={{ color: '#9c7f6e', fontSize: 10 }}>▾</span>
+            )}
           </div>
+          {showRestDropdown && restaurants.length > 1 && (
+            <div className={styles.restDropdown}>
+              {restaurants.map(r => (
+                <button
+                  key={r.id}
+                  className={`${styles.restDropdownItem} ${r.id === activeRestId ? styles.restDropdownActive : ''}`}
+                  onClick={() => switchRestaurant(r)}
+                >
+                  {r.name}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </aside>
 

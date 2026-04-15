@@ -1,7 +1,306 @@
-.container { display: flex; flex-direction: column; gap: 12px; }
-.legend { display: flex; gap: 16px; align-items: center; }
-.legendItem { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-sec); }
-.dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
-.svgWrapper { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--card-warm); }
-.svg { width: 100%; height: auto; display: block; }
-.empty { text-align: center; padding: 40px; color: var(--text-muted); }
+/* ============================================
+   KEYFRAMES
+   ============================================ */
+@keyframes backdropIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.96) translateY(16px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+
+/* ============================================
+   COMPACT VIEW
+   ============================================ */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.legend {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-sec);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* Expand button */
+.expandBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-family: var(--font-jost), sans-serif;
+  color: var(--text-sec);
+  cursor: pointer;
+  transition: all 180ms ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.expandBtn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: #fff5f3;
+}
+
+/* SVG wrapper — auto-height based on content */
+.svgWrapper {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--card-warm);
+  /* No fixed height — SVG viewBox drives the aspect ratio */
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Empty state */
+.empty {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+  background: var(--card-warm);
+}
+
+.empty p {
+  font-size: 14px;
+  margin: 0;
+}
+
+/* ============================================
+   FULLSCREEN MODAL
+   ============================================ */
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 5, 2, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: backdropIn 0.2s ease both;
+}
+
+.modal {
+  background: var(--card);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 960px;
+  max-height: calc(100vh - 40px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    0 32px 80px rgba(0, 0, 0, 0.15);
+  animation: modalIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Modal header */
+.modalHeader {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  background: var(--card);
+}
+
+.modalTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-cormorant), serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.modalControls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Zoom controls */
+.zoomControls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 3px;
+}
+
+.zoomBtn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: transparent;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--text-sec);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 150ms;
+  font-family: monospace;
+  line-height: 1;
+}
+
+.zoomBtn:hover:not(:disabled) {
+  background: var(--card);
+  color: var(--primary);
+}
+
+.zoomBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.zoomLabel {
+  font-size: 12px;
+  color: var(--text-sec);
+  min-width: 38px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.zoomReset {
+  background: none;
+  border: none;
+  border-left: 1px solid var(--border);
+  padding: 0 10px;
+  height: 30px;
+  font-size: 11px;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: var(--font-jost), sans-serif;
+  transition: color 150ms;
+}
+
+.zoomReset:hover {
+  color: var(--primary);
+}
+
+/* Close button */
+.closeBtn {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-sec);
+  transition: all 150ms;
+  flex-shrink: 0;
+}
+
+.closeBtn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: #fff5f3;
+}
+
+/* Canvas (scrollable SVG area) */
+.modalCanvas {
+  flex: 1;
+  overflow: auto;
+  background: #f5ede4;
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.modalSvgWrap {
+  transition: transform 250ms cubic-bezier(0.22, 1, 0.36, 1);
+  transform-origin: top center;
+  width: 100%;
+}
+
+.modalSvg {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(28, 16, 8, 0.1);
+}
+
+/* Modal footer */
+.modalFooter {
+  padding: 12px 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  background: var(--card);
+}
+
+.modalHint {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.modalSelected {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent);
+  background: #d1fae5;
+  padding: 4px 12px;
+  border-radius: 100px;
+}

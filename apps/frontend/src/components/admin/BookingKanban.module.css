@@ -1,0 +1,128 @@
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  min-height: 400px;
+}
+
+@media (max-width: 900px) {
+  .board { grid-template-columns: repeat(2, 1fr); }
+}
+
+.column {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  transition: background 150ms;
+  min-height: 300px;
+}
+
+.over {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+
+.columnHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.columnLabel {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-sec);
+}
+
+.columnCount {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-sec);
+  padding: 1px 8px;
+}
+
+.columnBody {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.emptyCol {
+  font-size: 12px;
+  color: var(--border);
+  text-align: center;
+  padding: 20px 0;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  margin-top: 4px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  cursor: grab;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: box-shadow 150ms, transform 150ms;
+}
+
+.card:hover {
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.card:active {
+  cursor: grabbing;
+}
+
+.dragging {
+  opacity: 0.4;
+}
+
+.overlay {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.16);
+  border-color: var(--text);
+  transform: rotate(2deg);
+  cursor: grabbing;
+  opacity: 1 !important;
+}
+
+.cardName {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.cardPhone {
+  font-size: 11px;
+  color: var(--text-sec);
+}
+
+.cardMeta {
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-sec);
+  margin-top: 4px;
+}
+
+.cardTable {
+  font-size: 11px;
+  color: var(--text-sec);
+  padding-top: 4px;
+  border-top: 1px solid var(--border);
+}

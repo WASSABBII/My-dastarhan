@@ -84,6 +84,8 @@ export default function RestaurantPage() {
 
   const handleTableClick = (tableId: string) => {
     if (!restaurant) return
+    const ta = availability.find(t => t.table.id === tableId)
+    if (!ta || ta.status === 'busy') return   // guard: занятый стол не трогаем
     store.setRestaurant(restaurant)
     store.setDateTimeGuests(bookingDate, bookingTime, bookingGuests)
     store.toggleTable(tableId)
@@ -149,16 +151,6 @@ export default function RestaurantPage() {
                     restaurantId={restaurant.id}
                     date={bookingDate}
                   />
-                  {store.selectedTableIds.length > 0 && (
-                    <div className={styles.selectedActions}>
-                      <p className={styles.selectedInfo}>
-                        Выбрано столиков: {store.selectedTableIds.length}
-                      </p>
-                      <button className={styles.proceedBtn} onClick={handleGoToBooking}>
-                        Оформить бронь →
-                      </button>
-                    </div>
-                  )}
                 </>
               )}
             </div>

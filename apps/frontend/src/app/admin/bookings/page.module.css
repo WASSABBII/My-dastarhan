@@ -14,6 +14,31 @@
   flex-wrap: wrap;
 }
 
+.toolbarRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.viewToggle {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.viewBtn {
+  padding: 7px 12px;
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  color: var(--text-sec);
+  cursor: pointer;
+  transition: background 150ms;
+}
+.viewBtn:hover { background: var(--bg); color: var(--text); }
+.viewActive { background: var(--text) !important; color: var(--bg) !important; }
+
 .dateInput {
   border: 1px solid var(--border);
   border-radius: 8px;
