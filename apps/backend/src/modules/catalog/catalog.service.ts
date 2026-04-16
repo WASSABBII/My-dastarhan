@@ -23,7 +23,7 @@ export class CatalogService {
     const qb = this.restaurantsRepo
       .createQueryBuilder('r')
       .leftJoinAndSelect('r.photos', 'p')
-      .where("r.status = 'active'");
+      .where("r.status != 'blocked'");
 
     if (filters.cuisine) {
       qb.andWhere('r.cuisine_type = :cuisine', { cuisine: filters.cuisine });
