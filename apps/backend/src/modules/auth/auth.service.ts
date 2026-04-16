@@ -34,6 +34,7 @@ export class AuthService {
         host: this.config.get('redis.host'),
         port: this.config.get('redis.port'),
       },
+       password: this.config.get('redis.password'),
     });
     this.redis.connect().catch(console.error);
   }
