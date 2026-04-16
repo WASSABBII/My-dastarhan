@@ -13,6 +13,7 @@ import { MenuCategory } from '../modules/menu/entities/menu-category.entity';
 import { MenuItem } from '../modules/menu/entities/menu-item.entity';
 import { Booking } from '../modules/bookings/entities/booking.entity';
 import { BookingTable } from '../modules/bookings/entities/booking-table.entity';
+import { Review } from '../modules/reviews/entities/review.entity'; 
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { BookingTable } from '../modules/bookings/entities/booking-table.entity'
           MenuItem,
           Booking,
           BookingTable,
+          Review,
         ],
         synchronize: true, // только для dev, в проде — миграции
         logging: false,
